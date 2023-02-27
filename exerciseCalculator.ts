@@ -13,6 +13,28 @@ interface Rating {
   description: string;
 }
 
+const parseArgumentsExercise = (args: string[]): number[] => {
+  if (args.length < 4) throw new Error('Not enough arguments!');
+
+  let errorMessage = '';
+
+  const hoursPerDay: number[] = args.slice(2).map((arg) => {
+    const hours = Number(arg);
+
+    if (isNaN(hours)) {
+      errorMessage = 'All values must me numbers!';
+    }
+
+    return hours;
+  });
+
+  if (errorMessage) {
+    throw new Error(errorMessage);
+  }
+
+  return hoursPerDay;
+};
+
 const calculateExercises = (
   hoursOfTrainingPerDay: number[],
   target: number
@@ -22,7 +44,7 @@ const calculateExercises = (
     hoursOfTrainingPerDay.length;
 
   const getRating = (): Rating => {
-    if (average > target) {
+    if (average >= target) {
       return {
         score: 1,
         description: "You've reached your target, well done!",
@@ -50,4 +72,14 @@ const calculateExercises = (
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const args = parseArgumentsExercise(process.argv);
+  console.log(calculateExercises(args.slice(1), args[0]));
+} catch (error: unknown) {
+  let errorMessage: string = 'Something went wrong!';
+
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message;
+  }
+  console.log(errorMessage);
+}

@@ -4,6 +4,11 @@ interface Category {
   category: string;
 }
 
+interface Arguments {
+  weight: number;
+  height: number;
+}
+
 const bmiMap: Category[] = [
   { min: 0, max: 16, category: 'Underweight (Severe thinness)' },
   { min: 16.0, max: 17, category: 'Underweight (Moderate thinness)' },
@@ -15,6 +20,22 @@ const bmiMap: Category[] = [
   { min: 40.0, max: 200.0, category: 'Obese (Class III)' },
 ];
 
+const parseArgumentsBmi = (args: string[]): Arguments => {
+  if (args.length < 4) throw new Error('Not enough arguments!');
+  if (args.length > 4) throw new Error('Too many arguments!');
+
+  const arguments: Arguments = {
+    height: Number(args[2]),
+    weight: Number(args[3]),
+  };
+
+  if (!isNaN(arguments.weight) && !isNaN(arguments.height)) {
+    return arguments;
+  } else {
+    throw new Error('Provided values were not numbers!');
+  }
+};
+
 const calculateBmi = (height: number, weight: number): string => {
   const bmi: number = parseFloat(
     (weight / Math.pow(height / 100, 2)).toFixed(1)
@@ -23,8 +44,18 @@ const calculateBmi = (height: number, weight: number): string => {
   const result: Category = bmiMap.find(
     (cat: Category) => bmi >= cat.min && bmi < cat.max
   );
-
-  return `A bmi with the value of ${bmi} is categorized as "${result.category}"`;
+  return `${result.category} | bmi: ${bmi}`;
 };
 
-console.log(calculateBmi(180, 74));
+try {
+  const { height, weight }: Arguments = parseArgumentsBmi(process.argv);
+  console.log('\n', calculateBmi(height, weight), '\n');
+} catch (error: unknown) {
+  let errorMessage: string = 'Something went wrong!';
+
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message;
+  }
+
+  console.log(errorMessage);
+}
