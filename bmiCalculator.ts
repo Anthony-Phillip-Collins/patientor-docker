@@ -1,6 +1,10 @@
-type category = { min: number; max: number; category: string };
+interface Category {
+  min: number;
+  max: number;
+  category: string;
+}
 
-const bmiMap: category[] = [
+const bmiMap: Category[] = [
   { min: 0, max: 16, category: 'Underweight (Severe thinness)' },
   { min: 16.0, max: 17, category: 'Underweight (Moderate thinness)' },
   { min: 17.0, max: 18.5, category: 'Underweight (Mild thinness)' },
@@ -16,8 +20,8 @@ const calculateBmi = (height: number, weight: number): string => {
     (weight / Math.pow(height / 100, 2)).toFixed(1)
   );
 
-  const result: category = bmiMap.find(
-    (cat: category) => bmi >= cat.min && bmi < cat.max
+  const result: Category = bmiMap.find(
+    (cat: Category) => bmi >= cat.min && bmi < cat.max
   );
 
   return `A bmi with the value of ${bmi} is categorized as "${result.category}"`;
