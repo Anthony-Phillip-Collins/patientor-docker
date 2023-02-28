@@ -1,8 +1,14 @@
 import express from 'express';
+import bp from 'body-parser';
+
 import { calculateBmi } from './bmiCalculator';
+import { calculateExercises, ExerciseInput } from './exerciseCalculator';
 
 const app = express();
-const port = 3000;
+app.use(bp.json());
+app.use(bp.urlencoded({ extended: true }));
+
+const port = 3002;
 
 app.get('/', (_req, res) => {
   res.redirect('/hello');
@@ -17,6 +23,17 @@ app.get('/bmi', (req, res) => {
   }
 
   return res.status(200).json(bmi);
+});
+
+app.post('/exercises', (req, res) => {
+  const data = req.body as ExerciseInput;
+  const result = calculateExercises(data.daily_exercises, data.target);
+
+  if (result.error) {
+    return res.status(400).send(result.error);
+  }
+
+  return res.status(200).json(result);
 });
 
 app.get('/hello', (_req, res) => {

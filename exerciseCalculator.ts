@@ -1,4 +1,4 @@
-interface Result {
+interface ExerciseResult {
   periodLength: number;
   trainingDays: number;
   success: boolean;
@@ -6,11 +6,21 @@ interface Result {
   ratingDescription: string;
   target: number;
   average: number;
+  error?: string;
 }
 
-interface Rating {
+interface ExerciseRating {
   score: number;
   description: string;
+}
+
+export interface ExerciseError {
+  error: string;
+}
+
+export interface ExerciseInput {
+  daily_exercises: number[];
+  target: number;
 }
 
 const parseArgumentsExercise = (args: string[]): number[] => {
@@ -35,35 +45,54 @@ const parseArgumentsExercise = (args: string[]): number[] => {
   return hoursPerDay;
 };
 
-const calculateExercises = (
-  hoursOfTrainingPerDay: number[],
+export const calculateExercises = (
+  daily_exercises: number[],
   target: number
-): Result => {
-  const average: number =
-    hoursOfTrainingPerDay.reduce((a, b) => a + b, 0) /
-    hoursOfTrainingPerDay.length;
+): ExerciseResult | ExerciseError => {
+  const errorMissing: ExerciseError = {
+    error: 'parameters missing',
+  };
 
-  const getRating = (): Rating => {
+  const errorMalformed: ExerciseError = {
+    error: 'malformatted parameters',
+  };
+
+  if (!daily_exercises || !target) {
+    return errorMissing;
+  }
+
+  if (!Array.isArray(daily_exercises) || isNaN(Number(target))) {
+    return errorMalformed;
+  }
+
+  const average: number =
+    daily_exercises.reduce((a, b) => a + b, 0) / daily_exercises.length;
+
+  if (isNaN(average)) {
+    return errorMalformed;
+  }
+
+  const getExerciseRating = (): ExerciseRating => {
     if (average >= target) {
       return {
-        score: 1,
+        score: 3,
         description: "You've reached your target, well done!",
       };
     } else if (average < target && average > target - 1) {
       return { score: 2, description: 'Not too bad but could be better!' };
     } else {
       return {
-        score: 3,
+        score: 1,
         description: 'Oh man that was terrible, try harder next time!',
       };
     }
   };
 
-  const rating: Rating = getRating();
+  const rating: ExerciseRating = getExerciseRating();
 
   return {
-    periodLength: hoursOfTrainingPerDay.length,
-    trainingDays: hoursOfTrainingPerDay.filter((hours) => hours > 0).length,
+    periodLength: daily_exercises.length,
+    trainingDays: daily_exercises.filter((hours) => hours > 0).length,
     success: average > target,
     rating: rating.score,
     ratingDescription: rating.description,

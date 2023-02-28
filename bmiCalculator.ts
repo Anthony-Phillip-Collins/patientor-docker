@@ -50,7 +50,7 @@ export const calculateBmi = (
   height: number,
   weight: number
 ): BmiResult | BmiError => {
-  const error = {
+  const error: BmiError = {
     error: 'malformatted parameters',
   };
 
