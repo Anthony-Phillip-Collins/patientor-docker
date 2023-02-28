@@ -81,5 +81,5 @@ try {
   if (error instanceof Error) {
     errorMessage += ' Error: ' + error.message;
   }
-  console.log(errorMessage);
+  console.log(errorMessage, '\n');
 }
