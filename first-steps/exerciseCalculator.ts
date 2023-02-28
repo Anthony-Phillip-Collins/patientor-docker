@@ -1,4 +1,4 @@
-interface ExerciseResult {
+interface IExerciseResult {
   periodLength: number;
   trainingDays: number;
   success: boolean;
@@ -9,21 +9,21 @@ interface ExerciseResult {
   error?: string;
 }
 
-interface ExerciseRating {
+interface IExerciseRating {
   score: number;
   description: string;
 }
 
-export interface ExerciseError {
+export interface IExerciseError {
   error: string;
 }
 
-export interface ExerciseInput {
+export interface IExerciseInput {
   daily_exercises: number[];
   target: number;
 }
 
-const parseArgumentsExercise = (args: string[]): number[] => {
+export const parseArgumentsExercise = (args: string[]): number[] => {
   if (args.length < 4) throw new Error('Not enough arguments!');
 
   let errorMessage = '';
@@ -48,12 +48,12 @@ const parseArgumentsExercise = (args: string[]): number[] => {
 export const calculateExercises = (
   daily_exercises: number[],
   target: number
-): ExerciseResult | ExerciseError => {
-  const errorMissing: ExerciseError = {
+): IExerciseResult | IExerciseError => {
+  const errorMissing: IExerciseError = {
     error: 'parameters missing',
   };
 
-  const errorMalformed: ExerciseError = {
+  const errorMalformed: IExerciseError = {
     error: 'malformatted parameters',
   };
 
@@ -72,7 +72,7 @@ export const calculateExercises = (
     return errorMalformed;
   }
 
-  const getExerciseRating = (): ExerciseRating => {
+  const getExerciseRating = (): IExerciseRating => {
     if (average >= target) {
       return {
         score: 3,
@@ -88,7 +88,7 @@ export const calculateExercises = (
     }
   };
 
-  const rating: ExerciseRating = getExerciseRating();
+  const rating: IExerciseRating = getExerciseRating();
 
   return {
     periodLength: daily_exercises.length,
@@ -100,15 +100,3 @@ export const calculateExercises = (
     average,
   };
 };
-
-try {
-  const args = parseArgumentsExercise(process.argv);
-  console.log(calculateExercises(args.slice(1), args[0]));
-} catch (error: unknown) {
-  let errorMessage = 'Something went wrong!';
-
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
-  }
-  console.log(errorMessage, '\n');
-}

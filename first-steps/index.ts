@@ -2,7 +2,7 @@ import express from 'express';
 import bp from 'body-parser';
 
 import { calculateBmi } from './bmiCalculator';
-import { calculateExercises, ExerciseInput } from './exerciseCalculator';
+import { calculateExercises, IExerciseInput } from './exerciseCalculator';
 
 const app = express();
 app.use(bp.json());
@@ -26,7 +26,7 @@ app.get('/bmi', (req, res) => {
 });
 
 app.post('/exercises', (req, res) => {
-  const data = req.body as ExerciseInput;
+  const data = req.body as IExerciseInput;
   const result = calculateExercises(data.daily_exercises, data.target);
 
   if (result.error) {

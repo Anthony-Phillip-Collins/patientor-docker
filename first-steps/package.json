@@ -4,8 +4,10 @@
   "description": "Part 9 - TypeScript",
   "main": "index.js",
   "scripts": {
-    "calculateBmi": "ts-node bmiCalculator.ts",
-    "calculateExercises": "ts-node exerciseCalculator.ts",
+    "calculateBmi": "ts-node bmiCalculatorCli.ts",
+    "calculateBmiExample": "ts-node bmiCalculatorCli.ts 180 91",
+    "calculateExercises": "ts-node exerciseCalculatorCli.ts",
+    "calculateExercisesExample": "ts-node exerciseCalculatorCli.ts 2 1 0 2 4.5 0 3 1 0 4",
     "start": "ts-node index.ts",
     "dev": "ts-node-dev index.ts",
     "lint": "eslint --ext .ts .",

@@ -1,25 +1,25 @@
-interface Category {
+interface IBmiCategory {
   min: number;
   max: number;
   category: string;
 }
 
-interface Arguments {
+export interface IBmiArguments {
   weight: number;
   height: number;
 }
 
-export interface BmiResult extends Arguments {
+export interface IBmiResult extends IBmiArguments {
   bmi: number;
   category: string;
   error?: string;
 }
 
-export interface BmiError {
+export interface IBmiError {
   error: string;
 }
 
-const bmiMap: Category[] = [
+const bmiMap: IBmiCategory[] = [
   { min: 0, max: 16, category: 'Underweight (Severe thinness)' },
   { min: 16.0, max: 17, category: 'Underweight (Moderate thinness)' },
   { min: 17.0, max: 18.5, category: 'Underweight (Mild thinness)' },
@@ -30,11 +30,11 @@ const bmiMap: Category[] = [
   { min: 40.0, max: 300.0, category: 'Obese (Class III)' },
 ];
 
-const parseArgumentsBmi = (args: string[]): Arguments => {
+export const parseArgumentsBmi = (args: string[]): IBmiArguments => {
   if (args.length < 4) throw new Error('Not enough arguments!');
   if (args.length > 4) throw new Error('Too many arguments!');
 
-  const parsedArguments: Arguments = {
+  const parsedArguments: IBmiArguments = {
     height: Number(args[2]),
     weight: Number(args[3]),
   };
@@ -49,8 +49,8 @@ const parseArgumentsBmi = (args: string[]): Arguments => {
 export const calculateBmi = (
   height: number,
   weight: number
-): BmiResult | BmiError => {
-  const error: BmiError = {
+): IBmiResult | IBmiError => {
+  const error: IBmiError = {
     error: 'malformatted parameters',
   };
 
@@ -62,8 +62,8 @@ export const calculateBmi = (
     (weight / Math.pow(height / 100, 2)).toFixed(1)
   );
 
-  const result: Category | undefined = bmiMap.find(
-    (cat: Category) => bmi >= cat.min && bmi < cat.max
+  const result: IBmiCategory | undefined = bmiMap.find(
+    (cat: IBmiCategory) => bmi >= cat.min && bmi < cat.max
   );
 
   if (!result?.category) {
@@ -77,16 +77,3 @@ export const calculateBmi = (
     category: result.category,
   };
 };
-
-try {
-  const { height, weight }: Arguments = parseArgumentsBmi(process.argv);
-  console.log(calculateBmi(height, weight), '\n');
-} catch (error: unknown) {
-  let errorMessage = 'Something went wrong!';
-
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
-  }
-
-  console.log(errorMessage, '\n');
-}
