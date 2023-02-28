@@ -9,12 +9,13 @@ interface Arguments {
   height: number;
 }
 
-interface BmiResult extends Arguments {
+export interface BmiResult extends Arguments {
   bmi: number;
   category: string;
+  error?: string;
 }
 
-interface BmiError {
+export interface BmiError {
   error: string;
 }
 
@@ -81,7 +82,7 @@ try {
   const { height, weight }: Arguments = parseArgumentsBmi(process.argv);
   console.log(calculateBmi(height, weight), '\n');
 } catch (error: unknown) {
-  let errorMessage: string = 'Something went wrong!';
+  let errorMessage = 'Something went wrong!';
 
   if (error instanceof Error) {
     errorMessage += ' Error: ' + error.message;

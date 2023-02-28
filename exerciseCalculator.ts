@@ -76,7 +76,7 @@ try {
   const args = parseArgumentsExercise(process.argv);
   console.log(calculateExercises(args.slice(1), args[0]));
 } catch (error: unknown) {
-  let errorMessage: string = 'Something went wrong!';
+  let errorMessage = 'Something went wrong!';
 
   if (error instanceof Error) {
     errorMessage += ' Error: ' + error.message;

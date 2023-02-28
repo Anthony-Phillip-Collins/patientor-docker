@@ -11,7 +11,12 @@ app.get('/', (_req, res) => {
 app.get('/bmi', (req, res) => {
   const { height, weight } = req.query;
   const bmi = calculateBmi(Number(height), Number(weight));
-  res.json(bmi);
+
+  if (bmi.error) {
+    return res.status(400).send(bmi.error);
+  }
+
+  return res.status(200).json(bmi);
 });
 
 app.get('/hello', (_req, res) => {
