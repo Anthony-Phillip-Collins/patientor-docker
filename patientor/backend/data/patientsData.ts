@@ -1,6 +1,7 @@
-import { Patient } from '../src/types';
+import { Gender } from '../src/enums/Gender';
+import { Patient } from '../src/types/Patient';
 
-const patientsData: Patient[] = [
+const data = [
   {
     id: 'd2773336-f723-11e9-8f0b-362b9e155667',
     name: 'John McClane',
@@ -42,5 +43,9 @@ const patientsData: Patient[] = [
     occupation: 'Digital evangelist',
   },
 ];
+
+const patientsData: Patient[] = data.map((d) => {
+  return { ...d, gender: d.gender as Gender };
+});
 
 export default patientsData;
