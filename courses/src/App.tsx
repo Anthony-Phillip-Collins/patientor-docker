@@ -183,7 +183,7 @@ const courseParts: CoursePart[] = [
 ];
 
 const App = () => {
-  const courseName: string = 'Half Stack application development';
+  const courseName = 'Half Stack application development';
   const total: number = courseParts.reduce(
     (carry, part) => carry + part.exerciseCount,
     0
