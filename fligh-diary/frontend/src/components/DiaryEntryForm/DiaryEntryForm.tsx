@@ -4,7 +4,7 @@ import { dateToString } from "../../util/DateUtil";
 import styles from "./DiaryEntryForm.module.css";
 
 interface IDiaryEntryFormProps {
-  onSubmit: (a: IDiaryEntryNew) => void;
+  onSubmit: (diaryEntryNew: IDiaryEntryNew) => void;
 }
 
 const DiaryEntryForm = ({ onSubmit }: IDiaryEntryFormProps) => {
@@ -53,27 +53,7 @@ const DiaryEntryForm = ({ onSubmit }: IDiaryEntryFormProps) => {
             }}
           />
         </label>
-        <label htmlFor="visibility">
-          <span>visibility</span>
-          <input
-            type="text"
-            id="visibility"
-            name="visibility"
-            value={visibility}
-            onChange={onVisibilityChange}
-          ></input>
-        </label>
-        <label htmlFor="weather">
-          <span>weather</span>
-          <input
-            type="text"
-            id="weather"
-            name="weather"
-            value={weather}
-            onChange={onWeatherChange}
-          ></input>
-        </label>
-        <label htmlFor="comment">
+        <label>
           <span>comment</span>
           <input
             type="text"
@@ -85,7 +65,123 @@ const DiaryEntryForm = ({ onSubmit }: IDiaryEntryFormProps) => {
             }}
           ></input>
         </label>
-        <button type="submit">submit</button>
+
+        <fieldset className={styles?.radioButtonsContainer}>
+          <legend>visibility</legend>
+          <div className={styles?.legend} aria-hidden="true">
+            visibility
+          </div>
+          <div className={styles?.radioButtons}>
+            <label>
+              <span>great</span>
+              <input
+                type="radio"
+                id="great"
+                name="visibility"
+                value="great"
+                onChange={onVisibilityChange}
+              />
+            </label>
+
+            <label>
+              <span>good</span>
+              <input
+                type="radio"
+                id="good"
+                name="visibility"
+                value="good"
+                onChange={onVisibilityChange}
+              />
+            </label>
+
+            <label>
+              <span>ok</span>
+              <input
+                type="radio"
+                id="ok"
+                name="visibility"
+                value="ok"
+                onChange={onVisibilityChange}
+              />
+            </label>
+
+            <label>
+              <span>poor</span>
+              <input
+                type="radio"
+                id="poor"
+                name="visibility"
+                value="poor"
+                onChange={onVisibilityChange}
+              />
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset className={styles?.radioButtonsContainer}>
+          <legend>weather</legend>
+          <div className={styles?.legend} aria-hidden="true">
+            weather
+          </div>
+          <div className={styles?.radioButtons}>
+            <label>
+              <span>sunny</span>
+              <input
+                type="radio"
+                id="sunny"
+                name="weather"
+                value="sunny"
+                onChange={onWeatherChange}
+              />
+            </label>
+
+            <label>
+              <span>rainy</span>
+              <input
+                type="radio"
+                id="rainy"
+                name="weather"
+                value="rainy"
+                onChange={onWeatherChange}
+              />
+            </label>
+
+            <label>
+              <span>cloudy</span>
+              <input
+                type="radio"
+                id="cloudy"
+                name="weather"
+                value="cloudy"
+                onChange={onWeatherChange}
+              />
+            </label>
+
+            <label>
+              <span>stormy</span>
+              <input
+                type="radio"
+                id="stormy"
+                name="weather"
+                value="stormy"
+                onChange={onWeatherChange}
+              />
+            </label>
+
+            <label>
+              <span>windy</span>
+              <input
+                type="radio"
+                id="windy"
+                name="weather"
+                value="windy"
+                onChange={onWeatherChange}
+              />
+            </label>
+          </div>
+        </fieldset>
+
+        <button type="submit">add</button>
       </form>
     </>
   );

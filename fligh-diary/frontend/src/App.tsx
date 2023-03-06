@@ -19,7 +19,7 @@ function App() {
 
     timerRef.current = window.setTimeout(() => {
       setErrorMessage("");
-    }, 2000);
+    }, 5000);
   };
 
   const onDiarySubmit = async (diaryEntryNew: IDiaryEntryNew) => {
