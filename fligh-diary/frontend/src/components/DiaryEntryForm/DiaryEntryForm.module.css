@@ -1,0 +1,18 @@
+.form {
+  display: inline-flex;
+  flex-direction: column;
+  width: 20rem;
+}
+
+.form label {
+  display: flex;
+  margin-bottom: 0.4rem;
+}
+
+.form label span {
+  flex-basis: 30%;
+}
+
+.form label input {
+  flex-basis: 70%;
+}

@@ -1,12 +1,12 @@
-import { Diary } from "../../types/Diary";
+import { IDiaryEntry } from "../../types/IDiaryEntry";
 
-interface DiaryEntryProps {
-  data: Diary;
+interface IDiaryEntryProps {
+  data: IDiaryEntry;
 }
 
 const DiaryEntry = ({
   data: { date, visibility, weather, comment },
-}: DiaryEntryProps) => {
+}: IDiaryEntryProps) => {
   return (
     <>
       <h3>{date}</h3>

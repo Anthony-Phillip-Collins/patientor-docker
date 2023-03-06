@@ -1,14 +1,13 @@
-import { Diary } from "../../types/Diary";
+import { IDiaryEntry } from "../../types/IDiaryEntry";
 import DiaryEntry from "../DiaryEntry/DiaryEntry";
 
-interface DiaryEntryListProps {
-  data: Diary[];
+interface IDiaryEntryListProps {
+  data: IDiaryEntry[];
 }
 
-const DiaryEntryList = ({ data }: DiaryEntryListProps) => {
+const DiaryEntryList = ({ data }: IDiaryEntryListProps) => {
   return (
     <>
-      <h2>Diary entries:</h2>
       {data.map((diary) => (
         <DiaryEntry key={diary.id} data={diary} />
       ))}
