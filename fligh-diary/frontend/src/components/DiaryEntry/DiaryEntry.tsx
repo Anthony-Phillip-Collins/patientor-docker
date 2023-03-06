@@ -12,7 +12,7 @@ const DiaryEntry = ({
       <h3>{date}</h3>
       <div>visibility: {visibility}</div>
       <div>weather: {weather}</div>
-      <div>comment: {comment}</div>
+      {comment && comment !== "" && <div>comment: {comment}</div>}
     </>
   );
 };

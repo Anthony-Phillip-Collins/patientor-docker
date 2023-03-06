@@ -10,22 +10,27 @@ function App() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const timerRef = useRef<number | null>();
 
+  const notify = (message: string) => {
+    setErrorMessage(message);
+
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    timerRef.current = window.setTimeout(() => {
+      setErrorMessage("");
+    }, 2000);
+  };
+
   const onDiarySubmit = async (diaryEntryNew: IDiaryEntryNew) => {
-    console.log("onDiarySubmit", diaryEntryNew);
     try {
       const diaryEntry = await saveDiaryEntry(diaryEntryNew);
       setDiaries(diaries.concat(diaryEntry));
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
-        setErrorMessage(e.response?.data);
-
-        if (timerRef.current) {
-          clearTimeout(timerRef.current);
-        }
-
-        timerRef.current = window.setTimeout(() => {
-          setErrorMessage("");
-        }, 2000);
+        notify(e.response?.data);
+      } else {
+        notify("Something went wrong!");
       }
     }
   };
