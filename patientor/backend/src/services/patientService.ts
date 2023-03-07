@@ -3,15 +3,24 @@ import patientsData from '../../data/patientsData';
 import { NewPatient, Patient, PatientNonSensitive } from '../types/Patient';
 
 const getPatients = (): Patient[] => {
+  patientsData.forEach((p) => {
+    p.entries = p.entries || [];
+  });
   return patientsData;
 };
 
+const getPatientById = (id: string): Patient | undefined => {
+  return getPatients().find((p) => p.id.toString() === id);
+};
+
 const getPatientsNonSensitive = (): PatientNonSensitive[] => {
-  return patientsData.map((patient) => {
-    const p = { ...patient };
-    delete p.ssn;
-    return p;
-  });
+  return getPatients().map(({ dateOfBirth, gender, name, occupation, id }) => ({
+    dateOfBirth,
+    gender,
+    name,
+    occupation,
+    id,
+  }));
 };
 
 export const addPatient = (newPatient: NewPatient): Patient => {
@@ -24,6 +33,7 @@ export const addPatient = (newPatient: NewPatient): Patient => {
 };
 export default {
   getPatients,
+  getPatientById,
   getPatientsNonSensitive,
   addPatient,
 };
