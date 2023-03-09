@@ -4,6 +4,7 @@ import patientServices from "../../services/patientServices";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import { Patient } from "../../types/Patient";
+import { Diagnose } from "../../types/Diagnose";
 
 interface GenderIconProps {
   gender: "male" | "female" | "other";
@@ -20,9 +21,16 @@ const GenderIcon = ({ gender }: GenderIconProps) => {
   }
 };
 
-const PatientPage = () => {
+interface Props {
+  diagnoses: Diagnose[];
+}
+
+const PatientPage = ({ diagnoses }: Props) => {
   const [patient, setPatient] = useState<Patient>();
   const { id } = useParams();
+
+  const getDescriptionOf = (code: string): string | undefined =>
+    diagnoses.find((d) => d.code === code)?.name;
 
   useEffect(() => {
     const loadData = async () => {
@@ -57,7 +65,9 @@ const PatientPage = () => {
           </p>
           <ul>
             {entry?.diagnosisCodes?.map((code, i) => (
-              <li key={i}>{code}</li>
+              <li key={i}>
+                {code} {getDescriptionOf(code)}
+              </li>
             ))}
           </ul>
         </div>
