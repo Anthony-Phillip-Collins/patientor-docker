@@ -14,13 +14,15 @@ const getPatientById = (id: string): Patient | undefined => {
 };
 
 const getPatientsNonSensitive = (): PatientNonSensitive[] => {
-  return getPatients().map(({ dateOfBirth, gender, name, occupation, id }) => ({
-    dateOfBirth,
-    gender,
-    name,
-    occupation,
-    id,
-  }));
+  return getPatients().map(
+    ({ dateOfBirth, gender, name, occupation, id }: PatientNonSensitive) => ({
+      dateOfBirth,
+      gender,
+      name,
+      occupation,
+      id,
+    })
+  );
 };
 
 export const addPatient = (newPatient: NewPatient): Patient => {

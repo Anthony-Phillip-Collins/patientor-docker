@@ -21,6 +21,7 @@ export const parseNewPatient = (object: unknown): NewPatient => {
     dateOfBirth: parseDate(object.dateOfBirth),
     gender: parseGender(object.gender),
     occupation: parseString(object.occupation, 'occupation'),
+    entries: [],
   };
 
   if ('ssn' in object) {
