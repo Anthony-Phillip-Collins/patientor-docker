@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import patientServices from "../../services/patientServices";
-import { Patient } from "../../types";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
+import { Patient } from "../../types/Patient";
 
 interface GenderIconProps {
   gender: "male" | "female" | "other";
@@ -48,6 +48,20 @@ const PatientPage = () => {
       </h3>
       <p>ssn: {patient?.ssn}</p>
       <p>occupation: {patient?.occupation}</p>
+
+      <h4>entries</h4>
+      {patient?.entries.map((entry) => (
+        <div key={entry.id}>
+          <p>
+            {entry.date} <em>{entry.description}</em>
+          </p>
+          <ul>
+            {entry?.diagnosisCodes?.map((code, i) => (
+              <li key={i}>{code}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </>
   );
 };

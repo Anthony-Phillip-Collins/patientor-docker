@@ -1,4 +1,4 @@
-import { Gender } from '../../enums/Gender';
+import { Gender } from '../../types/enums/Gender';
 import { isString } from './string';
 
 export const isGender = (value: string): value is Gender => {

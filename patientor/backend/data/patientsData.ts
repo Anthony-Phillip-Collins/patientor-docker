@@ -1,4 +1,4 @@
-import { Gender } from '../src/enums/Gender';
+import { Gender } from '../src/types/enums/Gender';
 import { Patient } from '../src/types/Patient';
 
 const patients: Patient[] = [
