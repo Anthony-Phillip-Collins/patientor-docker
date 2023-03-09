@@ -1,7 +1,5 @@
 import { Gender } from '../enums/Gender';
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Entry {}
+import { DiagnoseEntry } from './Diagnose';
 
 export interface Patient {
   id: string;
@@ -10,7 +8,7 @@ export interface Patient {
   ssn?: string;
   gender: Gender;
   occupation: string;
-  entries: Entry[];
+  entries: DiagnoseEntry[];
 }
 
 export type PatientNonSensitive = Omit<Patient, 'ssn' | 'entries'>;
