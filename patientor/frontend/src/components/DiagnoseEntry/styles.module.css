@@ -25,5 +25,9 @@
 }
 
 .healthRatingIcon2 {
+  color: orange;
+}
+
+.healthRatingIcon3 {
   color: red;
 }

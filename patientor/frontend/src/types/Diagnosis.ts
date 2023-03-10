@@ -1,7 +1,8 @@
 export enum HealthCheckRating {
-  Good = 0,
-  Ok = 1,
-  Bad = 2,
+  "Healthy" = 0,
+  "LowRisk" = 1,
+  "HighRisk" = 2,
+  "CriticalRisk" = 3,
 }
 
 export interface Diagnosis {
@@ -30,10 +31,7 @@ interface Discharge {
 
 interface HealthCheck extends DiagnosisEntryBase {
   type: "HealthCheck";
-  healthCheckRating:
-    | HealthCheckRating.Good
-    | HealthCheckRating.Ok
-    | HealthCheckRating.Bad;
+  healthCheckRating: HealthCheckRating;
 }
 
 interface HospitalEntry extends DiagnosisEntryBase {
