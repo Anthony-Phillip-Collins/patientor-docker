@@ -1,10 +1,16 @@
+export enum HealthCheckRating {
+  Good = 0,
+  Ok = 1,
+  Bad = 2,
+}
+
 export interface Diagnose {
   code: string;
   name: string;
   latin?: string;
 }
 
-interface DiagnoseEntryBase {
+export interface DiagnoseEntryBase {
   id: string;
   date: string;
   specialist: string;
@@ -12,26 +18,33 @@ interface DiagnoseEntryBase {
   diagnosisCodes?: string[];
 }
 
+interface SickLeave {
+  startDate: string;
+  endDate: string;
+}
+
+interface Discharge {
+  date: string;
+  criteria: string;
+}
+
 interface HealthCheck extends DiagnoseEntryBase {
-  type: 'HealthCheck';
-  healthCheckRating: number;
+  type: "HealthCheck";
+  healthCheckRating:
+    | HealthCheckRating.Good
+    | HealthCheckRating.Ok
+    | HealthCheckRating.Bad;
 }
 
 interface HospitalEntry extends DiagnoseEntryBase {
-  type: 'Hospital';
-  discharge: {
-    date: string;
-    criteria: string;
-  };
+  type: "Hospital";
+  discharge: Discharge;
 }
 
 interface OccupationalHealthcareEntry extends DiagnoseEntryBase {
-  type: 'OccupationalHealthcare';
+  type: "OccupationalHealthcare";
   employerName: string;
-  sickLeave?: {
-    startDate: string;
-    endDate: string;
-  };
+  sickLeave?: SickLeave;
 }
 
 export type DiagnoseEntry =

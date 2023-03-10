@@ -5,7 +5,7 @@ import {
   Divider,
   Alert,
 } from "@mui/material";
-import { PatientFormValues } from "../../types/PatientFormValues";
+import { PatientFormValues } from "../../types/Patient";
 
 import AddPatientForm from "./AddPatientForm";
 

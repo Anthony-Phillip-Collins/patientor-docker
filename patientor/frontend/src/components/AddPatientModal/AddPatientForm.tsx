@@ -9,8 +9,8 @@ import {
   Button,
   SelectChangeEvent,
 } from "@mui/material";
-import { PatientFormValues } from "../../types/PatientFormValues";
 import { Gender } from "../../types/enums/Gender";
+import { PatientFormValues } from "../../types/Patient";
 
 interface Props {
   onCancel: () => void;

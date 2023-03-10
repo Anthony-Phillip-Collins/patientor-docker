@@ -1,8 +1,7 @@
 import axios from "axios";
 
 import { apiBaseUrl } from "../constants";
-import { Patient } from "../types/Patient";
-import { PatientFormValues } from "../types/PatientFormValues";
+import { Patient, PatientFormValues } from "../types/Patient";
 
 const getAll = async () => {
   const { data } = await axios.get<Patient[]>(`${apiBaseUrl}/patients`);

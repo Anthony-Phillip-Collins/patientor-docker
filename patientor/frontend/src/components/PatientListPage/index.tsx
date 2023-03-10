@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Box,
   Table,
@@ -17,15 +17,12 @@ import HealthRatingBar from "../HealthRatingBar";
 
 import patientService from "../../services/patientServices";
 import { Link } from "react-router-dom";
-import { Patient } from "../../types/Patient";
-import { PatientFormValues } from "../../types/PatientFormValues";
+import { Patient, PatientFormValues } from "../../types/Patient";
+import { AppContext } from "../../App";
 
-interface Props {
-  patients: Patient[];
-  setPatients: React.Dispatch<React.SetStateAction<Patient[]>>;
-}
+const PatientListPage = () => {
+  const appContext = useContext(AppContext);
 
-const PatientListPage = ({ patients, setPatients }: Props) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>();
 
@@ -39,7 +36,7 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
   const submitNewPatient = async (values: PatientFormValues) => {
     try {
       const patient = await patientService.create(values);
-      setPatients(patients.concat(patient));
+      appContext?.setPatients(appContext.patients.concat(patient));
       setModalOpen(false);
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
@@ -77,7 +74,7 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.values(patients).map((patient: Patient) => (
+          {appContext?.patients.map((patient: Patient) => (
             <TableRow key={patient.id}>
               <TableCell>
                 <Link to={`/patients/${patient.id}`}>{patient.name}</Link>

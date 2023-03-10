@@ -1,10 +1,11 @@
+import FemaleIcon from "@mui/icons-material/Female";
+import MaleIcon from "@mui/icons-material/Male";
+import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import patientServices from "../../services/patientServices";
-import FemaleIcon from "@mui/icons-material/Female";
-import MaleIcon from "@mui/icons-material/Male";
 import { Patient } from "../../types/Patient";
-import { Diagnose } from "../../types/Diagnose";
+import DiagnoseEntry from "../DiagnoseEntry";
 
 interface GenderIconProps {
   gender: "male" | "female" | "other";
@@ -21,16 +22,9 @@ const GenderIcon = ({ gender }: GenderIconProps) => {
   }
 };
 
-interface Props {
-  diagnoses: Diagnose[];
-}
-
-const PatientPage = ({ diagnoses }: Props) => {
+const PatientPage = () => {
   const [patient, setPatient] = useState<Patient>();
   const { id } = useParams();
-
-  const getDescriptionOf = (code: string): string | undefined =>
-    diagnoses.find((d) => d.code === code)?.name;
 
   useEffect(() => {
     const loadData = async () => {
@@ -59,19 +53,11 @@ const PatientPage = ({ diagnoses }: Props) => {
 
       <h4>entries</h4>
       {patient?.entries.map((entry) => (
-        <div key={entry.id}>
-          <p>
-            {entry.date} <em>{entry.description}</em>
-          </p>
-          <ul>
-            {entry?.diagnosisCodes?.map((code, i) => (
-              <li key={i}>
-                {code} {getDescriptionOf(code)}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <DiagnoseEntry entry={entry} key={entry.id} />
       ))}
+      <Button variant="contained" color="primary">
+        ADD NEW ENTRY
+      </Button>
     </>
   );
 };
