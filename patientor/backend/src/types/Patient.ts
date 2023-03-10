@@ -1,5 +1,5 @@
-import { Gender } from './enums/Gender';
-import { DiagnoseEntry } from './Diagnose';
+import { Gender } from "./enums/Gender";
+import { DiagnosisEntry } from "./Diagnosis";
 
 export interface Patient {
   id: string;
@@ -8,8 +8,10 @@ export interface Patient {
   ssn?: string;
   gender: Gender;
   occupation: string;
-  entries: DiagnoseEntry[];
+  entries: DiagnosisEntry[];
 }
 
-export type PatientNonSensitive = Omit<Patient, 'ssn' | 'entries'>;
-export type NewPatient = Omit<Patient, 'id'>;
+export type PatientNonSensitive = Omit<Patient, "ssn" | "entries">;
+export type NewPatient = Omit<Patient, "id">;
+
+export type PatientFormValues = Omit<Patient, "id" | "entries">;

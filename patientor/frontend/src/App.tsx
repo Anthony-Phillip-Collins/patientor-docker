@@ -9,12 +9,12 @@ import patientService from "./services/patientServices";
 import PatientListPage from "./components/PatientListPage";
 import PatientPage from "./components/PatientPage";
 import { Patient } from "./types/Patient";
-import { Diagnose } from "./types/Diagnose";
-import diagnosesService from "./services/diagnoseService";
+import { Diagnosis } from "./types/Diagnosis";
+import diagnosisService from "./services/diagnosisService";
 
 interface AppContextValue {
   patients: Patient[];
-  diagnoses: Diagnose[];
+  Diagnosis: Diagnosis[];
   setPatients: React.Dispatch<React.SetStateAction<Patient[]>>;
 }
 
@@ -22,7 +22,7 @@ export const AppContext = createContext<AppContextValue | null>(null);
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
-  const [diagnoses, setDiagnoses] = useState<Diagnose[]>([]);
+  const [Diagnosis, setDiagnosis] = useState<Diagnosis[]>([]);
 
   useEffect(() => {
     void axios.get<void>(`${apiBaseUrl}/ping`);
@@ -37,22 +37,22 @@ const App = () => {
     };
     fetchPatientList();
 
-    const fetchDiagnoses = async () => {
+    const fetchDiagnosis = async () => {
       try {
-        const d = await diagnosesService.getAll();
-        setDiagnoses(d);
+        const d = await diagnosisService.getAll();
+        setDiagnosis(d);
       } catch (error) {
         console.log("Something went wrong!", error);
       }
     };
 
-    fetchDiagnoses();
+    fetchDiagnosis();
   }, []);
 
   return (
     <div className="App">
       <Router>
-        <AppContext.Provider value={{ patients, diagnoses, setPatients }}>
+        <AppContext.Provider value={{ patients, Diagnosis, setPatients }}>
           <Container>
             <Typography
               variant="h3"

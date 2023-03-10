@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import patientServices from "../../services/patientServices";
 import { Patient } from "../../types/Patient";
-import DiagnoseEntry from "../DiagnoseEntry";
+import DiagnosisEntry from "../DiagnoseEntry";
 
 interface GenderIconProps {
   gender: "male" | "female" | "other";
@@ -53,7 +53,7 @@ const PatientPage = () => {
 
       <h4>entries</h4>
       {patient?.entries.map((entry) => (
-        <DiagnoseEntry entry={entry} key={entry.id} />
+        <DiagnosisEntry entry={entry} key={entry.id} />
       ))}
       <Button variant="contained" color="primary">
         ADD NEW ENTRY

@@ -4,18 +4,18 @@ export enum HealthCheckRating {
   Bad = 2,
 }
 
-export interface Diagnose {
+export interface Diagnosis {
   code: string;
   name: string;
   latin?: string;
 }
 
-export interface DiagnoseEntryBase {
+export interface DiagnosisEntryBase {
   id: string;
   date: string;
   specialist: string;
   description: string;
-  diagnosisCodes?: string[];
+  diagnosisCodes?: Array<Diagnosis["code"]>;
 }
 
 interface SickLeave {
@@ -28,7 +28,7 @@ interface Discharge {
   criteria: string;
 }
 
-interface HealthCheck extends DiagnoseEntryBase {
+interface HealthCheck extends DiagnosisEntryBase {
   type: "HealthCheck";
   healthCheckRating:
     | HealthCheckRating.Good
@@ -36,18 +36,18 @@ interface HealthCheck extends DiagnoseEntryBase {
     | HealthCheckRating.Bad;
 }
 
-interface HospitalEntry extends DiagnoseEntryBase {
+interface HospitalEntry extends DiagnosisEntryBase {
   type: "Hospital";
   discharge: Discharge;
 }
 
-interface OccupationalHealthcareEntry extends DiagnoseEntryBase {
+interface OccupationalHealthcareEntry extends DiagnosisEntryBase {
   type: "OccupationalHealthcare";
   employerName: string;
   sickLeave?: SickLeave;
 }
 
-export type DiagnoseEntry =
+export type DiagnosisEntry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheck;
