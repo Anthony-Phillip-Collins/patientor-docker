@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import patientService from '../services/patientService';
-import { parseNewDiagnosisEntry } from '../utils/parsers/diagnosis';
-import { parseNewPatient } from '../utils/parsers/patient';
+import { parseNewDiagnosisEntry } from '../types/utils/parsers/diagnosis';
+import { parseNewPatient } from '../types/utils/parsers/patient';
 
 export const patientsRouter = Router();
 

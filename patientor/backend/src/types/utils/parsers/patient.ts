@@ -1,4 +1,4 @@
-import { NewPatient } from '../../types/Patient';
+import { NewPatient } from '../../Patient';
 import { parseDate } from './date';
 import { parseGender } from './gender';
 import { parseString } from './string';

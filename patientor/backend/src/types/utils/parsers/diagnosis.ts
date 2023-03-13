@@ -5,8 +5,8 @@ import {
   NewDiagnosisEntry,
   NewDiagnosisEntryBase,
   SickLeave,
-} from '../../types/Diagnosis';
-import assertNever from '../../types/utils/assertNever';
+} from '../../Diagnosis';
+import assertNever from '../assertNever';
 import { parseDate } from './date';
 import { compareObjectShapes } from './object';
 import { parseString } from './string';
