@@ -1,6 +1,6 @@
 import { ReactElement, useContext } from "react";
 import { AppContext } from "../../App";
-import exhaustiveMatchGuard from "../../utils/exhaustiveMatchGuard";
+import assertNever from "../../utils/assertNever";
 import HealthRatingIcon from "@mui/icons-material/Favorite";
 import HospitalIcon from "@mui/icons-material/LocalHospital";
 import WorkIcon from "@mui/icons-material/Work";
@@ -38,7 +38,7 @@ const DiagnosisEntryBase = ({
         <time dateTime={date}>{date}</time>
       </div>
       <em>{description}</em>
-      {diagnosisCodes && (
+      {diagnosisCodes && diagnosisCodes.length > 0 && (
         <ul>
           {diagnosisCodes?.map((code, i) => (
             <li key={i}>
@@ -82,7 +82,7 @@ const DiagnosisEntry = ({ entry }: Props) => {
         );
         break;
       default:
-        exhaustiveMatchGuard(entry);
+        assertNever(entry);
     }
   } catch (error) {
     if (error instanceof Error) {

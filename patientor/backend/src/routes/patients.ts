@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import patientService from '../services/patientService';
+import { parseNewDiagnosisEntry } from '../utils/parsers/diagnosis';
 import { parseNewPatient } from '../utils/parsers/patient';
 
 export const patientsRouter = Router();
@@ -24,5 +25,21 @@ patientsRouter.post('/', (req: Request, res: Response) => {
       return res.status(400).json({ error: error.message });
     }
     return res.status(400).json({ error: 'Patient data is invalid!' });
+  }
+});
+
+patientsRouter.post('/:id/entries', (req: Request, res: Response) => {
+  try {
+    const newDiagnosisEntry = parseNewDiagnosisEntry(req.body);
+    const diagnosisEntry = patientService.addDiagnosisEntry(
+      newDiagnosisEntry,
+      req.params.id
+    );
+    return res.status(200).json(diagnosisEntry);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return res.status(400).json({ error: error.message });
+    }
+    return res.status(400).json({ error: 'Diagnosis data is invalid!' });
   }
 });
