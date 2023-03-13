@@ -1,11 +1,20 @@
 import { isString } from './string';
 
 const hasDateFormat = (value: string): boolean => {
-  /* correct format: yyy-mm-dd */
-  const format = [4, 2, 2];
-  return value
-    .split('-')
-    .reduce((result, v, i) => result && v.length === format[i], true);
+  /* correct format: yyyy-mm-dd or yyyy-m-d */
+  const year = { min: 4, max: 4 };
+  const month = { min: 1, max: 2 };
+  const day = month;
+  const format = [year, month, day];
+  const split = value.split('-');
+  return (
+    split.length === format.length &&
+    split.reduce(
+      (result, v, i) =>
+        result && v.length <= format[i].max && v.length >= format[i].min,
+      true
+    )
+  );
 };
 
 export const isDate = (value: string): boolean => {

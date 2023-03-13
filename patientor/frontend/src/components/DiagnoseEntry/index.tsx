@@ -1,6 +1,5 @@
 import { ReactElement, useContext } from "react";
 import { AppContext } from "../../App";
-import assertNever from "../../utils/assertNever";
 import HealthRatingIcon from "@mui/icons-material/Favorite";
 import HospitalIcon from "@mui/icons-material/LocalHospital";
 import WorkIcon from "@mui/icons-material/Work";
@@ -11,6 +10,7 @@ import {
 } from "../../types/Diagnosis";
 
 import styles from "./styles.module.css";
+import assertNever from "../../types/utils/assertNever";
 
 interface Props {
   entry: IDiagnosisEntry;
