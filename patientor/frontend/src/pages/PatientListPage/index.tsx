@@ -1,27 +1,18 @@
 import { useContext, useState } from "react";
-import {
-  Box,
-  Table,
-  Button,
-  TableHead,
-  Typography,
-  TableCell,
-  TableRow,
-  TableBody,
-} from "@mui/material";
+import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from "@mui/material";
 import axios from "axios";
 
-import AddPatientModal from "../AddPatientModal";
+import AddPatientModal from "../../components/AddPatientModal";
 
-import HealthRatingBar from "../HealthRatingBar";
+import HealthRatingBar from "../../components/HealthRatingBar";
 
 import patientService from "../../services/patientServices";
 import { Link } from "react-router-dom";
 import { Patient, PatientFormValues } from "../../types/Patient";
-import { AppContext } from "../../App";
+import { AppContext, AppContextValue } from "../../App";
 
 const PatientListPage = () => {
-  const appContext = useContext(AppContext);
+  const appContext: AppContextValue | null = useContext(AppContext);
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>();
@@ -41,10 +32,7 @@ const PatientListPage = () => {
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
         if (e?.response?.data && typeof e?.response?.data === "string") {
-          const message = e.response.data.replace(
-            "Something went wrong. Error: ",
-            "",
-          );
+          const message = e.response.data.replace("Something went wrong. Error: ", "");
           console.error(message);
           setError(message);
         } else {
@@ -88,12 +76,7 @@ const PatientListPage = () => {
           ))}
         </TableBody>
       </Table>
-      <AddPatientModal
-        modalOpen={modalOpen}
-        onSubmit={submitNewPatient}
-        error={error}
-        onClose={closeModal}
-      />
+      <AddPatientModal modalOpen={modalOpen} onSubmit={submitNewPatient} error={error} onClose={closeModal} />
       <Button variant="contained" onClick={() => openModal()}>
         Add New Patient
       </Button>

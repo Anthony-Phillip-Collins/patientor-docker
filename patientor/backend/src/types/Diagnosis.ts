@@ -1,4 +1,4 @@
-import { UnionOmit } from './utils';
+import UnionOmit from './utils/unionOmit';
 
 export enum HealthCheckRating {
   'Healthy' = 0,

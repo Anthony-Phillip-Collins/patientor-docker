@@ -1,5 +1,5 @@
 import { ReactElement, useContext } from "react";
-import { AppContext } from "../../App";
+import { AppContext, AppContextValue } from "../../App";
 import HealthRatingIcon from "@mui/icons-material/Favorite";
 import HospitalIcon from "@mui/icons-material/LocalHospital";
 import WorkIcon from "@mui/icons-material/Work";
@@ -27,9 +27,9 @@ const DiagnosisEntryBase = ({
   children,
   themeIcon,
 }: BaseProps) => {
-  const appContext = useContext(AppContext);
+  const appContext: AppContextValue | null = useContext(AppContext);
   const getDescriptionOf = (code: string): string | undefined =>
-    appContext?.Diagnosis.find((d) => d.code === code)?.name;
+    appContext?.diagnoses.find((d) => d.code === code)?.name;
 
   return (
     <div key={id} className={styles?.DiagnosisEntry}>
@@ -59,9 +59,7 @@ const DiagnosisEntry = ({ entry }: Props) => {
       case "HealthCheck":
         return (
           <DiagnosisEntryBase baseProps={entry} themeIcon={<HealthCheckIcon />}>
-            <HealthRatingIcon
-              className={styles[`healthRatingIcon${entry.healthCheckRating}`]}
-            />
+            <HealthRatingIcon className={styles[`healthRatingIcon${entry.healthCheckRating}`]} />
           </DiagnosisEntryBase>
         );
         break;

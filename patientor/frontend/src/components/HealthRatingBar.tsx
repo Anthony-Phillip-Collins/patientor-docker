@@ -27,12 +27,7 @@ const HEALTHBAR_TEXTS = [
 const HealthRatingBar = ({ rating, showText }: BarProps) => {
   return (
     <div className="health-bar">
-      <StyledRating
-        readOnly
-        value={4 - rating}
-        max={4}
-        icon={<Favorite fontSize="inherit" />}
-      />
+      <StyledRating readOnly value={4 - rating} max={4} icon={<Favorite fontSize="inherit" />} />
 
       {showText ? <p>{HEALTHBAR_TEXTS[rating]}</p> : null}
     </div>

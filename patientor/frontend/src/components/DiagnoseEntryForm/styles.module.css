@@ -1,0 +1,6 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  border: 1px dotted black;
+  padding: 1rem;
+}

@@ -1,14 +1,6 @@
 import { useState, SyntheticEvent } from "react";
 
-import {
-  TextField,
-  InputLabel,
-  MenuItem,
-  Select,
-  Grid,
-  Button,
-  SelectChangeEvent,
-} from "@mui/material";
+import { TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent } from "@mui/material";
 import { Gender } from "../../types/enums/Gender";
 import { PatientFormValues } from "../../types/Patient";
 
@@ -59,12 +51,7 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
   return (
     <div>
       <form onSubmit={addPatient}>
-        <TextField
-          label="Name"
-          fullWidth
-          value={name}
-          onChange={({ target }) => setName(target.value)}
-        />
+        <TextField label="Name" fullWidth value={name} onChange={({ target }) => setName(target.value)} />
         <TextField
           label="Social security number"
           fullWidth
@@ -86,12 +73,7 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
         />
 
         <InputLabel style={{ marginTop: 20 }}>Gender</InputLabel>
-        <Select
-          label="Gender"
-          fullWidth
-          value={gender}
-          onChange={onGenderChange}
-        >
+        <Select label="Gender" fullWidth value={gender} onChange={onGenderChange}>
           {genderOptions.map((option) => (
             <MenuItem key={option.label} value={option.value}>
               {option.label}
