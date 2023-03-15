@@ -4,9 +4,9 @@ export const isString = (text: unknown): text is string => {
 
 export const parseString = (value: unknown, prop?: unknown): string => {
   if (!value || !isString(value)) {
-    let errorMessage = `${value} is not of type string!`;
+    let errorMessage = `The value provided is not a string: "${value}"`;
     if (prop && isString(prop)) {
-      errorMessage = `The value '${value}' for the property ${prop} is invalid.`;
+      errorMessage = `The value of ${prop} is invalid: "${value}"`;
     }
     throw new Error(errorMessage);
   }

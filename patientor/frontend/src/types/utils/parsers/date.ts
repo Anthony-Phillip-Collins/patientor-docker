@@ -21,9 +21,13 @@ export const isDate = (value: string): boolean => {
   return !!value && Boolean(Date.parse(value)) && hasDateFormat(value);
 };
 
-export const parseDate = (value: unknown): string => {
+export const parseDate = (value: unknown, prop?: unknown): string => {
   if (!value || !isString(value) || !isDate(value)) {
-    throw new Error(`${value} is not a valid Date.`);
+    let errorMessage = `The value provided is not a date: "${value}"`;
+    if (prop && isString(prop)) {
+      errorMessage = `The value of ${prop} is invalid: "${value}"`;
+    }
+    throw new Error(errorMessage);
   }
   return value;
 };

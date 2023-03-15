@@ -33,7 +33,7 @@ export const parseHealthCheckRating = (value: unknown): HealthCheckRating => {
   const numValue = Number(value);
 
   if (isNaN(numValue) || !isHealthCheckRating(numValue)) {
-    throw new Error(`${value} is not a DiagnosisType.`);
+    throw new Error(`The value of healthCheckRating is invalid.`);
   }
   return numValue;
 };
@@ -53,7 +53,7 @@ const parseDischarge = (object: unknown): Discharge => {
   }
   return {
     criteria: parseString(object.criteria, 'criteria'),
-    date: parseDate(object.date),
+    date: parseDate(object.date, 'discharge date'),
   };
 };
 
@@ -80,8 +80,8 @@ const parseSickLeave = (object: unknown): SickLeave => {
     throw new Error(`Not of type SickLeave: ${JSON.stringify(object)}`);
   }
   return {
-    startDate: parseDate(object.startDate),
-    endDate: parseDate(object.endDate),
+    startDate: parseDate(object.startDate, 'sickLeave startDate'),
+    endDate: parseDate(object.endDate, 'sickLeave endDate'),
   };
 };
 
@@ -91,7 +91,7 @@ export const parseNewDiagnosisEntry = (object: unknown): NewDiagnosisEntry => {
   }
 
   const newEntryBase: NewDiagnosisEntryBase = {
-    date: parseDate(object.date),
+    date: parseDate(object.date, 'date'),
     specialist: parseString(object.specialist, 'specialist'),
     description: parseString(object.description, 'description'),
     diagnosisCodes: parseDiagnosisCodes(object),
@@ -117,7 +117,12 @@ export const parseNewDiagnosisEntry = (object: unknown): NewDiagnosisEntry => {
         employerName: parseString(object?.employerName, 'employerName'),
       };
 
-      if ('sickLeave' in object) {
+      if (
+        'sickLeave' in object &&
+        !(
+          object.sickLeave?.startDate === '' && object.sickLeave?.endDate === ''
+        )
+      ) {
         newOccupationalHeathcareEntry.sickLeave = parseSickLeave(
           object?.sickLeave
         );

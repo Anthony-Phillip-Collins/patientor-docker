@@ -62,7 +62,7 @@ const OccupationalHealthcareFields = ({
             label="Start date"
             variant="standard"
             type="date"
-            InputLabelProps={{ shrink: true, required: false }}
+            InputLabelProps={{ shrink: true }}
             inputProps={{ max: sickLeaveEndDate }}
             onChange={(e) => setSickLeaveStartDate(e.target.value)}
             value={sickLeaveStartDate}
@@ -76,7 +76,7 @@ const OccupationalHealthcareFields = ({
             label="End date"
             variant="standard"
             type="date"
-            InputLabelProps={{ shrink: true, required: false }}
+            InputLabelProps={{ shrink: true }}
             inputProps={{ min: sickLeaveStartDate }}
             onChange={(e) => setSickLeaveEndDate(e.target.value)}
             value={sickLeaveEndDate}
