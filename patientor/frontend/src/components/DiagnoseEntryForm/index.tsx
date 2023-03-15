@@ -10,8 +10,7 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
-import dayjs from "dayjs";
-import { forwardRef, useContext, useState } from "react";
+import { forwardRef, useContext, useEffect, useImperativeHandle, useState } from "react";
 import { AppContext, AppContextValue } from "../../App";
 import { Diagnosis, HospitalEntry, NewDiagnosisEntry, NewDiagnosisEntryBase } from "../../types/Diagnosis";
 import assertNever from "../../types/utils/assertNever";
@@ -20,29 +19,32 @@ import HospitalFields from "./HospitalFields";
 import OccupationalHealthcareFields from "./OccupationalHealthcareFields";
 import styles from "./styles.module.css";
 
-const formatDate = (date: dayjs.Dayjs): string => date.format("YYYY-MM-DD");
-
 export interface Props {
   onSubmit(data: NewDiagnosisEntry): void;
+  onCancel(): void;
   errorMessage: string | null;
+  type: NewDiagnosisEntry["type"];
+  setType(type: NewDiagnosisEntry["type"]): void;
 }
 
-export type Ref = HTMLDivElement;
+export type Ref = { reset(): void };
 
 const DiagnoseEntryForm = forwardRef<Ref, Props>((props, ref) => {
-  const { onSubmit, errorMessage } = props;
+  const { onSubmit, onCancel, errorMessage, type, setType } = props;
   const appContext: AppContextValue | null = useContext(AppContext);
-
-  const [type, setType] = useState<NewDiagnosisEntry["type"]>("HealthCheck");
-
   const [validate, setValidate] = useState(false);
+  const diagnosisTypes: Array<{ type: NewDiagnosisEntry["type"]; label: string }> = [
+    { type: "HealthCheck", label: "Health Check" },
+    { type: "Hospital", label: "Hospital" },
+    { type: "OccupationalHealthcare", label: "Occupational Healthcare" },
+  ];
 
-  const getInitialDataByType = (type: NewDiagnosisEntry["type"]): NewDiagnosisEntry => {
+  const getInitialData = (): NewDiagnosisEntry => {
     const newEntryBase: NewDiagnosisEntryBase = {
-      date: formatDate(dayjs()),
-      description: "Something",
-      specialist: "Dr. SPecia;l",
-      diagnosisCodes: ["J10.1"],
+      date: "",
+      description: "",
+      specialist: "",
+      diagnosisCodes: [],
     };
 
     switch (type) {
@@ -61,10 +63,10 @@ const DiagnoseEntryForm = forwardRef<Ref, Props>((props, ref) => {
         return {
           ...newEntryBase,
           type,
-          employerName: "Employa",
+          employerName: "",
           sickLeave: {
-            startDate: "2022-12-01",
-            endDate: "2022-12-02",
+            startDate: "",
+            endDate: "",
           },
         };
       default:
@@ -72,7 +74,14 @@ const DiagnoseEntryForm = forwardRef<Ref, Props>((props, ref) => {
     }
   };
 
-  const [data, setData] = useState<NewDiagnosisEntry>(getInitialDataByType(type));
+  const [data, setData] = useState<NewDiagnosisEntry>(getInitialData());
+
+  const reset = () => {
+    setValidate(false);
+    setData({ ...getInitialData() });
+  };
+
+  useImperativeHandle(ref, () => ({ reset }), []);
 
   const onDiagnosisCodeChange = (event: SelectChangeEvent<Diagnosis["code"][]>) => {
     const {
@@ -90,8 +99,12 @@ const DiagnoseEntryForm = forwardRef<Ref, Props>((props, ref) => {
     onSubmit(data);
   };
 
+  useEffect(() => {
+    reset();
+  }, [type]);
+
   return (
-    <div ref={ref}>
+    <div>
       {errorMessage && errorMessage !== "" && (
         <>
           <Alert severity="error">
@@ -102,11 +115,34 @@ const DiagnoseEntryForm = forwardRef<Ref, Props>((props, ref) => {
       )}
 
       <form className={styles?.form} onSubmit={handleSubmit}>
+        <FormControl variant="standard" sx={{ mb: 3 }} fullWidth>
+          <InputLabel id="diagnosis-type">Diagnosis Type</InputLabel>
+          <Select
+            labelId="diagnosis-type"
+            label="Diagnosis Type"
+            id="diagnosis-type-select"
+            onChange={(e) => {
+              const item = diagnosisTypes.find(({ type }) => type.toString() === e.target.value);
+              if (item?.type) {
+                setType(item.type);
+              }
+            }}
+            value={type || ""}
+          >
+            {diagnosisTypes?.map(({ type, label }) => (
+              <MenuItem key={label} value={type}>
+                {label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <TextField
           id="description"
           label="Description"
           variant="standard"
           sx={{ mb: 3 }}
+          InputLabelProps={{ required: true }}
           onChange={(e) => setData({ ...data, description: e.target.value })}
           value={data.description}
           error={validate && data.description === ""}
@@ -117,6 +153,7 @@ const DiagnoseEntryForm = forwardRef<Ref, Props>((props, ref) => {
           label="Specialist"
           variant="standard"
           sx={{ mb: 3 }}
+          InputLabelProps={{ required: true }}
           onChange={(e) => setData({ ...data, specialist: e.target.value })}
           value={data.specialist}
           error={validate && data.specialist === ""}
@@ -158,7 +195,7 @@ const DiagnoseEntryForm = forwardRef<Ref, Props>((props, ref) => {
             setEmployer={(employerName) => {
               setData({ ...data, employerName });
             }}
-            sickLeave={data.sickLeave}
+            sickLeave={data?.sickLeave}
             setSickLeave={(startDate: string, endDate: string) => {
               setData({
                 ...data,
@@ -198,7 +235,7 @@ const DiagnoseEntryForm = forwardRef<Ref, Props>((props, ref) => {
 
         <Grid container direction="row" justifyContent="space-between" alignItems="center" mt={5}>
           <Grid item>
-            <Button variant="contained" color="error">
+            <Button variant="contained" color="error" onClick={() => onCancel()}>
               Cancel
             </Button>
           </Grid>

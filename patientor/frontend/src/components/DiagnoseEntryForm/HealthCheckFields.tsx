@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { HealthCheckRating } from "../../types/Diagnosis";
 import { parseHealthCheckRating } from "../../types/utils/parsers/diagnosis";
 
@@ -21,15 +21,15 @@ const HealthCheckFields = ({ healthCheckRating, setHealthCheckRating, validate }
   return (
     <>
       <FormControl variant="standard" sx={{ mb: 3 }} error={showError}>
-        <InputLabel id="health-check-rating">Health check rating</InputLabel>
+        <InputLabel id="health-check-rating">Health check rating*</InputLabel>
         <Select
           labelId="health-check-rating"
+          label="Health check rating*"
           id="health-check-rating-select"
           onChange={(e) => {
             setHealthCheckRating(parseHealthCheckRating(e.target.value));
           }}
           value={getRating() || ""}
-          label="Diagnosis codes"
         >
           {healthRatingValues?.map((v) => (
             <MenuItem key={v} value={v}>
@@ -37,7 +37,7 @@ const HealthCheckFields = ({ healthCheckRating, setHealthCheckRating, validate }
             </MenuItem>
           ))}
         </Select>
-        {showError && <FormHelperText>Error</FormHelperText>}
+        {/* {showError && <FormHelperText>Error</FormHelperText>} */}
       </FormControl>
     </>
   );

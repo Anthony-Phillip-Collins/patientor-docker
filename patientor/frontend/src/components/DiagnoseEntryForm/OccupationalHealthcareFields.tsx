@@ -24,6 +24,17 @@ const OccupationalHealthcareFields = ({
     setSickLeave(sickLeaveStartDate, sickLeaveEndDate);
   }, [sickLeaveStartDate, sickLeaveEndDate]);
 
+  useEffect(() => {
+    if (sickLeave) {
+      if (sickLeave?.startDate !== sickLeaveStartDate) {
+        setSickLeaveStartDate(sickLeave.startDate);
+      }
+      if (sickLeave?.endDate !== sickLeaveEndDate) {
+        setSickLeaveEndDate(sickLeave.endDate);
+      }
+    }
+  }, [sickLeave]);
+
   return (
     <>
       <TextField
@@ -31,12 +42,13 @@ const OccupationalHealthcareFields = ({
         label="employer"
         variant="standard"
         sx={{ mb: 3 }}
+        InputLabelProps={{ required: true }}
         onChange={(e) => {
           setEmployer(e.target.value);
         }}
         value={employerName}
         error={validate && employerName === ""}
-        helperText={(validate && employerName === "" && "Incorrect entry.") || ""}
+        // helperText={(validate && employerName === "" && "Incorrect entry.") || ""}
       />
 
       <Typography variant="body1" component="p" mb={1}>
@@ -50,11 +62,11 @@ const OccupationalHealthcareFields = ({
             label="Start date"
             variant="standard"
             type="date"
-            InputLabelProps={{ shrink: true, required: true }}
+            InputLabelProps={{ shrink: true, required: false }}
             inputProps={{ max: sickLeaveEndDate }}
             onChange={(e) => setSickLeaveStartDate(e.target.value)}
             value={sickLeaveStartDate}
-            error={validate && sickLeaveStartDate === ""}
+            error={validate && !Date.parse(sickLeaveStartDate) && !!Date.parse(sickLeaveEndDate)}
             fullWidth
           />
         </Grid>
@@ -64,11 +76,11 @@ const OccupationalHealthcareFields = ({
             label="End date"
             variant="standard"
             type="date"
-            InputLabelProps={{ shrink: true, required: true }}
+            InputLabelProps={{ shrink: true, required: false }}
             inputProps={{ min: sickLeaveStartDate }}
             onChange={(e) => setSickLeaveEndDate(e.target.value)}
             value={sickLeaveEndDate}
-            error={validate && sickLeaveEndDate === ""}
+            error={validate && !Date.parse(sickLeaveEndDate) && !!Date.parse(sickLeaveStartDate)}
             fullWidth
           />
         </Grid>

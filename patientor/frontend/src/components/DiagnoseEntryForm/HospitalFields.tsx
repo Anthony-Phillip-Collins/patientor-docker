@@ -19,12 +19,13 @@ const HospitalFields = ({ discharge, setDischarge, validate }: Props) => {
         label="Criteria"
         variant="standard"
         sx={{ mb: 3 }}
+        InputLabelProps={{ required: true }}
         onChange={(e) => {
           setDischarge({ ...discharge, criteria: e.target.value });
         }}
         value={discharge.criteria}
         error={validate && discharge.criteria === ""}
-        helperText={(validate && discharge.criteria === "" && "Incorrect entry.") || ""}
+        // helperText={(validate && discharge.criteria === "" && "Incorrect entry.") || ""}
       />
 
       <TextField

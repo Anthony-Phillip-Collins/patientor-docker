@@ -1,9 +1,10 @@
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
-import { Button } from "@mui/material";
+import { Button, Collapse, Fade, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import { AxiosError } from "axios";
 import { createRef, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import DiagnosisEntry from "../../components/DiagnoseEntry";
 import DiagnoseEntryForm, { Ref } from "../../components/DiagnoseEntryForm";
 import patientServices from "../../services/patientServices";
@@ -29,6 +30,9 @@ const PatientPage = () => {
   const { id } = useParams();
   const [patient, setPatient] = useState<Patient>();
   const [errorMessage, setErrorMessage] = useState("");
+  const diagnoseEntryForm = createRef<Ref>();
+  const [diagnosisType, setDiagnosisType] = useState<NewDiagnosisEntry["type"]>("HealthCheck");
+  const [showForm, setShowForm] = useState(false);
 
   const onFormSubmit = async (data: NewDiagnosisEntry) => {
     if (!patient) return;
@@ -50,10 +54,9 @@ const PatientPage = () => {
 
   const resetForm = () => {
     setErrorMessage("");
-    console.log(diagnoseEntryForm.current);
+    diagnoseEntryForm.current?.reset();
+    setShowForm(false);
   };
-
-  const diagnoseEntryForm = createRef<Ref>();
 
   useEffect(() => {
     const loadData = async () => {
@@ -73,21 +76,44 @@ const PatientPage = () => {
 
   return (
     <>
-      <h3>
-        {patient?.name} {patient?.gender && <GenderIcon gender={patient.gender} />}
-      </h3>
-      <p>ssn: {patient?.ssn}</p>
-      <p>occupation: {patient?.occupation}</p>
+      <Button component={Link} to="/" variant="contained" color="primary">
+        Home
+      </Button>
 
-      <DiagnoseEntryForm onSubmit={onFormSubmit} errorMessage={errorMessage} ref={diagnoseEntryForm} />
+      <Box component="div" sx={{ mt: 4, mb: 3, p: 0, border: "none" }}>
+        <Typography variant="h5" component="h2">
+          {patient?.name} {patient?.gender && <GenderIcon gender={patient.gender} />}
+        </Typography>
 
-      <h4>entries</h4>
+        <div>ssn: {patient?.ssn}</div>
+        <div>occupation: {patient?.occupation}</div>
+      </Box>
+
+      <Collapse in={showForm}>
+        <Box sx={{ mb: 3 }}>
+          <DiagnoseEntryForm
+            onSubmit={onFormSubmit}
+            onCancel={() => setShowForm(false)}
+            errorMessage={errorMessage}
+            ref={diagnoseEntryForm}
+            type={diagnosisType}
+            setType={setDiagnosisType}
+          />
+        </Box>
+      </Collapse>
+
+      <Typography variant="h6" component="h3">
+        entries
+      </Typography>
+
       {patient?.entries?.map((entry) => (
         <DiagnosisEntry entry={entry} key={entry.id} />
       ))}
-      <Button variant="contained" color="primary">
-        ADD NEW ENTRY
-      </Button>
+      <Fade in={!showForm}>
+        <Button variant="contained" color="primary" onClick={() => setShowForm(true)}>
+          ADD NEW ENTRY
+        </Button>
+      </Fade>
     </>
   );
 };

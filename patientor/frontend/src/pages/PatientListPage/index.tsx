@@ -48,7 +48,7 @@ const PatientListPage = () => {
   return (
     <div className="App">
       <Box>
-        <Typography align="center" variant="h6">
+        <Typography align="left" variant="h6" component="h2">
           Patient list
         </Typography>
       </Box>

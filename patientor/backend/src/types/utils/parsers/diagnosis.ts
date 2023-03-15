@@ -29,7 +29,7 @@ const isHealthCheckRating = (value: number): value is HealthCheckRating => {
     .includes(value);
 };
 
-const parseHealthCheckRating = (value: unknown): HealthCheckRating => {
+export const parseHealthCheckRating = (value: unknown): HealthCheckRating => {
   const numValue = Number(value);
 
   if (isNaN(numValue) || !isHealthCheckRating(numValue)) {
@@ -110,19 +110,25 @@ export const parseNewDiagnosisEntry = (object: unknown): NewDiagnosisEntry => {
         type: 'Hospital',
         discharge: parseDischarge(object?.discharge),
       };
-    case 'OccupationalHealthcare':
+    case 'OccupationalHealthcare': {
       const newOccupationalHeathcareEntry: NewDiagnosisEntry = {
         ...newEntryBase,
         type: 'OccupationalHealthcare',
-        employerName: parseString(object?.employerName),
+        employerName: parseString(object?.employerName, 'employerName'),
       };
 
-      if ('sickLeave' in object) {
+      if (
+        'sickLeave' in object &&
+        !(
+          object.sickLeave?.startDate === '' && object.sickLeave?.endDate === ''
+        )
+      ) {
         newOccupationalHeathcareEntry.sickLeave = parseSickLeave(
           object?.sickLeave
         );
       }
       return newOccupationalHeathcareEntry;
+    }
     default:
       return assertNever(object);
   }

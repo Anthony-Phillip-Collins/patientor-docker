@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext } from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Routes, useLocation } from "react-router-dom";
 import { Button, Divider, Container, Typography } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -60,15 +60,14 @@ const App = () => {
             <Container>
               <Typography
                 variant="h3"
+                component="h1"
                 style={{
                   marginBottom: "0.5em",
                 }}
               >
                 Patientor
               </Typography>
-              <Button component={Link} to="/" variant="contained" color="primary">
-                Home
-              </Button>
+
               <Divider hidden />
               <Routes>
                 <Route path="/" element={<PatientListPage />} />

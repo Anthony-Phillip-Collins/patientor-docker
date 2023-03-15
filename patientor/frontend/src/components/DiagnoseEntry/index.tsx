@@ -75,7 +75,14 @@ const DiagnosisEntry = ({ entry }: Props) => {
       case "OccupationalHealthcare":
         return (
           <DiagnosisEntryBase baseProps={entry} themeIcon={<WorkIcon />}>
-            <div>employer: {entry.employerName}</div>
+            <>
+              <div>employer: {entry.employerName}</div>
+              {entry.sickLeave && (
+                <div>
+                  Sickleave: {entry.sickLeave.startDate} - {entry.sickLeave.endDate}
+                </div>
+              )}
+            </>
           </DiagnosisEntryBase>
         );
         break;
