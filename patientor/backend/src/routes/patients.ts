@@ -62,14 +62,39 @@ patientsRouter.post('/', (req: Request, res: Response) => {
 });
 
 patientsRouter.post('/:id/entries', (req: Request, res: Response) => {
-  try {
-    const newDiagnosisEntry = parseNewDiagnosisEntry(req.body);
-    const diagnosisEntry = patientService.addDiagnosisEntry(newDiagnosisEntry, req.params.id);
-    return res.status(200).json(diagnosisEntry);
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      return res.status(400).json({ error: error.message });
-    }
-    return res.status(400).json({ error: 'Diagnosis data is invalid!' });
-  }
+  req.body.patientId = req.params.id;
+  const newDiagnosisEntry = parseNewDiagnosisEntry(req.body);
+  void patientService
+    .addDiagnosisEntry(newDiagnosisEntry)
+    .then((data) => {
+      return res.status(200).json(data);
+    })
+    .catch((error: unknown) => {
+      if (error instanceof Error) {
+        return res.status(400).json({ error: error.message });
+      }
+      return res.status(400).json({ error: 'Diagnosis data is invalid!' });
+    });
+
+  // return res.status(200).json(newDiagnosisEntry);
+  // try {
+  //   const newDiagnosisEntry = parseNewDiagnosisEntry(req.body);
+  //   patientService
+  //     .addDiagnosisEntry(newDiagnosisEntry)
+  //     .then((data) => {
+  //       return res.status(200).json(data);
+  //     })
+  //     .catch((error: unknown) => {
+  //       if (error instanceof Error) {
+  //         return res.status(400).json({ error: error.message });
+  //       }
+  //       return res.status(400).json({ error: 'Diagnosis data is invalid!1' });
+  //     });
+  // } catch (error: unknown) {
+  //   if (error instanceof Error) {
+  //     return res.status(400).json({ error: error.message });
+  //   }
+  //   return res.status(400).json({ error: 'Diagnosis data is invalid!2' });
+  // }
+  // return res.status(400).json({ error: 'Diagnosis data is invalid!3' });
 });

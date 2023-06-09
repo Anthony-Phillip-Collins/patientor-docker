@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import DiagnosisEntryModel from '../mongo/models/DiagnosisEntry';
 import PatientModel from '../mongo/models/Patient';
 import { DiagnosisEntry, NewDiagnosisEntry } from '../types/Diagnosis';
 import { NewPatient, Patient, PatientNonSensitive } from '../types/Patient';
@@ -39,21 +39,31 @@ export const addPatient = async (newPatient: NewPatient): Promise<Patient> => {
   return patient;
 };
 
-export const addDiagnosisEntry = async (
-  newDiagnosisEntry: NewDiagnosisEntry,
-  patientId: string
-): Promise<DiagnosisEntry> => {
-  const diagnosisEntry = {
-    ...newDiagnosisEntry,
-    id: uuidv4(),
-  };
-  const patient = await getPatientById(patientId);
+export const addDiagnosisEntry = async (newDiagnosisEntry: NewDiagnosisEntry): Promise<DiagnosisEntry> => {
+  // const diagnosisEntry = {
+  //   ...newDiagnosisEntry,
+  //   id: uuidv4(),
+  // };
+  const patient = await getPatientById(newDiagnosisEntry.patientId);
   if (!patient) {
     throw new Error('Patient id doesn’t exist.');
   }
 
-  patient?.entries.push(diagnosisEntry);
-  return diagnosisEntry;
+  const DiagnosisEntry = DiagnosisEntryModel(newDiagnosisEntry.type);
+
+  let entry;
+  try {
+    entry = await new DiagnosisEntry(newDiagnosisEntry).save();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('Couldn’t save DiagnosisEntry!');
+    }
+  }
+
+  // patient?.entries.push(diagnosisEntry);
+  return entry;
 };
 
 export default {
