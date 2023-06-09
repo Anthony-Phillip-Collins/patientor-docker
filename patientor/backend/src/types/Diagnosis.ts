@@ -1,10 +1,10 @@
-import UnionOmit from "./utils/unionOmit";
+import UnionOmit from './utils/unionOmit';
 
 export enum HealthCheckRating {
-  "Healthy" = 0,
-  "LowRisk" = 1,
-  "HighRisk" = 2,
-  "CriticalRisk" = 3,
+  'Healthy' = 0,
+  'LowRisk' = 1,
+  'HighRisk' = 2,
+  'CriticalRisk' = 3,
 }
 
 export interface Diagnosis {
@@ -14,11 +14,12 @@ export interface Diagnosis {
 }
 
 export interface DiagnosisEntryBase {
-  id: string;
+  id?: string;
   date: string;
   specialist: string;
   description: string;
-  diagnosisCodes?: Array<Diagnosis["code"]>;
+  diagnosisCodes?: Array<Diagnosis['code']>;
+  patientId: string;
 }
 
 export interface SickLeave {
@@ -32,23 +33,23 @@ export interface Discharge {
 }
 
 export interface HealthCheck extends DiagnosisEntryBase {
-  type: "HealthCheck";
+  type: 'HealthCheck';
   healthCheckRating: HealthCheckRating;
 }
 
 export interface HospitalEntry extends DiagnosisEntryBase {
-  type: "Hospital";
+  type: 'Hospital';
   discharge: Discharge;
 }
 
 export interface OccupationalHealthcareEntry extends DiagnosisEntryBase {
-  type: "OccupationalHealthcare";
+  type: 'OccupationalHealthcare';
   employerName: string;
   sickLeave?: SickLeave;
 }
 
 export type DiagnosisEntry = HospitalEntry | OccupationalHealthcareEntry | HealthCheck;
 
-export type NewDiagnosisEntry = UnionOmit<DiagnosisEntry, "id">;
+export type NewDiagnosisEntry = UnionOmit<DiagnosisEntry, 'id'>;
 
-export type NewDiagnosisEntryBase = Omit<DiagnosisEntryBase, "id">;
+export type NewDiagnosisEntryBase = Omit<DiagnosisEntryBase, 'id'>;

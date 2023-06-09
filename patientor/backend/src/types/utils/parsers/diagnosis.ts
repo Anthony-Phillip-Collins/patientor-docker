@@ -17,8 +17,7 @@ const isNewDiagnosisEntry = (object: unknown): object is NewDiagnosisEntry => {
   }
 
   const mandatory = ['date', 'specialist', 'description', 'type'];
-  const mandatoryOk =
-    mandatory.filter((p) => p in object).length === mandatory.length;
+  const mandatoryOk = mandatory.filter((p) => p in object).length === mandatory.length;
 
   return mandatoryOk;
 };
@@ -95,6 +94,7 @@ export const parseNewDiagnosisEntry = (object: unknown): NewDiagnosisEntry => {
     specialist: parseString(object.specialist, 'specialist'),
     description: parseString(object.description, 'description'),
     diagnosisCodes: parseDiagnosisCodes(object),
+    patientId: parseString(object.patientId, 'patientId'),
   };
 
   switch (object.type) {
@@ -117,15 +117,8 @@ export const parseNewDiagnosisEntry = (object: unknown): NewDiagnosisEntry => {
         employerName: parseString(object?.employerName, 'employerName'),
       };
 
-      if (
-        'sickLeave' in object &&
-        !(
-          object.sickLeave?.startDate === '' && object.sickLeave?.endDate === ''
-        )
-      ) {
-        newOccupationalHeathcareEntry.sickLeave = parseSickLeave(
-          object?.sickLeave
-        );
+      if ('sickLeave' in object && !(object.sickLeave?.startDate === '' && object.sickLeave?.endDate === '')) {
+        newOccupationalHeathcareEntry.sickLeave = parseSickLeave(object?.sickLeave);
       }
       return newOccupationalHeathcareEntry;
     }
