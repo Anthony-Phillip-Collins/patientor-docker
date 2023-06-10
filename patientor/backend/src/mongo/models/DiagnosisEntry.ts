@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { HealthCheck, HospitalEntry, OccupationalHealthcareEntry } from '../../types/Diagnosis';
+import { DiagnosisEntry, HealthCheck, HospitalEntry, OccupationalHealthcareEntry } from '../../types/Diagnosis';
 import schemaToJSON from '../../util/schemaToJSON';
 
 const collection = 'diagnosisEntries';
@@ -14,25 +14,47 @@ const base = {
   patientId: String,
 };
 
-export const healthCheckSchema = new Schema<HealthCheck>({
+/* DiagnosisEntry */
+
+const diagnosisEntrySchema = new Schema<DiagnosisEntry>({});
+
+schemaToJSON(diagnosisEntrySchema);
+
+const DiagnosisEntryModel = model<DiagnosisEntry>('DiagnosisEntry', diagnosisEntrySchema, collection);
+
+/* HealthCheck */
+
+const healthCheckSchema = new Schema<HealthCheck>({
   ...base,
   healthCheckRating: { type: Number },
+});
+
+healthCheckSchema.pre('find', function () {
+  this.getQuery().type = 'HealthCheck';
 });
 
 schemaToJSON(healthCheckSchema);
 
 const HealthCheckModel = model<HealthCheck>('HealthCheck', healthCheckSchema, collection);
 
-export const hospitalEntrySchema = new Schema<HospitalEntry>({
+/* Hospital */
+
+const hospitalSchema = new Schema<HospitalEntry>({
   ...base,
   discharge: { date: String, criteria: String },
 });
 
-schemaToJSON(hospitalEntrySchema);
+hospitalSchema.pre('find', function () {
+  this.getQuery().type = 'Hospital';
+});
 
-const HospitalEntryModel = model<HospitalEntry>('HospitalEntry', hospitalEntrySchema, collection);
+schemaToJSON(hospitalSchema);
 
-export const occupationalHealthcareEntry = new Schema<OccupationalHealthcareEntry>({
+const HospitalModel = model<HospitalEntry>('Hospital', hospitalSchema, collection);
+
+/* OccupationalHealthcare */
+
+const occupationalHealthcareEntrySchema = new Schema<OccupationalHealthcareEntry>({
   ...base,
   employerName: String,
   sickLeave: {
@@ -41,27 +63,34 @@ export const occupationalHealthcareEntry = new Schema<OccupationalHealthcareEntr
   },
 });
 
-schemaToJSON(occupationalHealthcareEntry);
+occupationalHealthcareEntrySchema.pre('find', function () {
+  this.getQuery().type = 'OccupationalHealthcare';
+});
 
-const OccupationalHealthcareEntryModel = model<OccupationalHealthcareEntry>(
+schemaToJSON(occupationalHealthcareEntrySchema);
+
+const OccupationalHealthcareModel = model<OccupationalHealthcareEntry>(
   'OccupationalHealthcareEntry',
-  occupationalHealthcareEntry,
+  occupationalHealthcareEntrySchema,
   collection
 );
 
-// const DiagnosisEntryModels = { HealthCheckModel, HospitalEntryModel, OccupationalHealthcareEntryModel };
+export const DiagnosisEntryModels = {
+  DiagnosisEntryModel,
+  HealthCheckModel,
+  HospitalModel,
+  OccupationalHealthcareModel,
+};
 
-const DiagnosisEntryModel = (type: string) => {
+export const GetDiagnosisEntryModel = (type: string) => {
   switch (type) {
     case 'HealthCheck':
       return HealthCheckModel;
     case 'Hospital':
-      return HospitalEntryModel;
+      return HospitalModel;
     case 'OccupationalHealthcare':
-      return OccupationalHealthcareEntryModel;
+      return OccupationalHealthcareModel;
     default:
       throw new Error('Invalid type');
   }
 };
-
-export default DiagnosisEntryModel;
