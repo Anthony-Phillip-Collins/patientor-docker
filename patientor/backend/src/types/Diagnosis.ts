@@ -1,5 +1,11 @@
 import UnionOmit from './utils/unionOmit';
 
+export const DiagnosisType = Object.freeze({
+  HealthCheck: 'HealthCheck',
+  Hospital: 'Hospital',
+  OccupationalHealthcare: 'OccupationalHealthcare',
+});
+
 export enum HealthCheckRating {
   'Healthy' = 0,
   'LowRisk' = 1,

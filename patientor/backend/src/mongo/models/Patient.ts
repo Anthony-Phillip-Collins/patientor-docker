@@ -10,17 +10,6 @@ const schema = new Schema<Patient>({
   gender: { type: String, required: true },
   occupation: { type: String, required: true },
   entries: [{ type: Types.ObjectId, ref: 'DiagnosisEntry' }],
-  //   { healthCheckRating: { type: Number } },
-  //   { type: String, required: true },
-  //   {
-  //     discharge: {
-  //       date: String,
-  //       criteria: String,
-  //     },
-  //   },
-  //   { employerName: String },
-  //   { sickLeave: { startDate: String, endDate: String } },
-  // ],
 });
 
 schemaToJSON(schema);

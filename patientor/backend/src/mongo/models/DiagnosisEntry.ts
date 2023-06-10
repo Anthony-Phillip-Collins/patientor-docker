@@ -5,13 +5,12 @@ import schemaToJSON from '../../util/schemaToJSON';
 const collection = 'diagnosisEntries';
 
 const base = {
-  type: String,
-  id: String,
-  date: String,
-  specialist: String,
+  type: { type: String, required: true },
+  date: { type: String, required: true },
+  specialist: { type: String, required: true },
   description: String,
   diagnosisCodes: [{ type: String }],
-  patientId: String,
+  patientId: { type: String, required: true },
 };
 
 /* DiagnosisEntry */
@@ -26,7 +25,7 @@ const DiagnosisEntryModel = model<DiagnosisEntry>('DiagnosisEntry', diagnosisEnt
 
 const healthCheckSchema = new Schema<HealthCheck>({
   ...base,
-  healthCheckRating: { type: Number },
+  healthCheckRating: { type: Number, required: true },
 });
 
 healthCheckSchema.pre('find', function () {
@@ -41,7 +40,7 @@ const HealthCheckModel = model<HealthCheck>('HealthCheck', healthCheckSchema, co
 
 const hospitalSchema = new Schema<HospitalEntry>({
   ...base,
-  discharge: { date: String, criteria: String },
+  discharge: { date: { type: String, required: true }, criteria: { type: String, required: true } },
 });
 
 hospitalSchema.pre('find', function () {
@@ -54,24 +53,24 @@ const HospitalModel = model<HospitalEntry>('Hospital', hospitalSchema, collectio
 
 /* OccupationalHealthcare */
 
-const occupationalHealthcareEntrySchema = new Schema<OccupationalHealthcareEntry>({
+const occupationalHealthcareSchema = new Schema<OccupationalHealthcareEntry>({
   ...base,
-  employerName: String,
+  employerName: { type: String, required: true },
   sickLeave: {
     startDate: String,
     endDate: String,
   },
 });
 
-occupationalHealthcareEntrySchema.pre('find', function () {
+occupationalHealthcareSchema.pre('find', function () {
   this.getQuery().type = 'OccupationalHealthcare';
 });
 
-schemaToJSON(occupationalHealthcareEntrySchema);
+schemaToJSON(occupationalHealthcareSchema);
 
 const OccupationalHealthcareModel = model<OccupationalHealthcareEntry>(
   'OccupationalHealthcareEntry',
-  occupationalHealthcareEntrySchema,
+  occupationalHealthcareSchema,
   collection
 );
 
