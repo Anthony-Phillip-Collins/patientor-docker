@@ -1,4 +1,4 @@
-import { GetDiagnosisEntryModel } from '../mongo/models/DiagnosisEntry';
+import { DiagnosisEntryCreate, DiagnosisEntryModel } from '../mongo/models/DiagnosisEntry';
 import PatientModel from '../mongo/models/Patient';
 import { DiagnosisEntry, NewDiagnosisEntry } from '../types/Diagnosis';
 import { NewPatient, Patient, PatientNonSensitive } from '../types/Patient';
@@ -8,8 +8,7 @@ const getPatients = async (): Promise<Patient[]> => {
 };
 
 const getPatientById = async (id: string): Promise<Patient | undefined | null> => {
-  // const d: DiagnosisEntry[] = await DiagnosisEntryModels.DiagnosisEntryModel.find({ patientId: id });
-  // console.log('////////////////@@@@@@@@@@@@@@@', d);
+  console.log(await DiagnosisEntryModel.find({}));
   return await PatientModel.findById(id).populate('entries');
 };
 
@@ -34,8 +33,8 @@ export const addDiagnosisEntry = async (newDiagnosisEntry: NewDiagnosisEntry): P
 
   let entry;
   try {
-    const DiagnosisEntry = GetDiagnosisEntryModel(newDiagnosisEntry.type);
-    entry = await new DiagnosisEntry(newDiagnosisEntry).save();
+    const EntryModel = DiagnosisEntryCreate(newDiagnosisEntry.type);
+    entry = await new EntryModel(newDiagnosisEntry).save();
     await PatientModel.findByIdAndUpdate(newDiagnosisEntry.patientId, { $addToSet: { entries: entry._id.toString() } });
   } catch (error: unknown) {
     if (error instanceof Error) {

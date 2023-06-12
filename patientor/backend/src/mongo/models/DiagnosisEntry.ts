@@ -1,3 +1,6 @@
+// const entry: DiagnosisEntry[] = await DiagnosisEntryModels.DiagnosisEntryModel.find({ patientId: id });
+// console.log(entry);
+
 import { Schema, model } from 'mongoose';
 import { DiagnosisEntry, HealthCheck, HospitalEntry, OccupationalHealthcareEntry } from '../../types/Diagnosis';
 import schemaToJSON from '../../util/schemaToJSON';
@@ -74,14 +77,18 @@ const OccupationalHealthcareModel = model<OccupationalHealthcareEntry>(
   collection
 );
 
-export const DiagnosisEntryModels = {
-  DiagnosisEntryModel,
-  HealthCheckModel,
-  HospitalModel,
-  OccupationalHealthcareModel,
-};
+/* Workaround for saving an instance of Union type DiagnosisEntry
+ * Example:
+ *  const EntryModel = DiagnosisEntryCreate('HealthCheck');
+ *  entry = await new EntryModel(obj as NewDiagnosisEntry).save();
+ *
+ * DiagnosisEntryCreate is only used for the creation of new DiagnosisEntry instances.
+ * All other actions after creation e.g. Querying the database etc. are done with DiagnosisEntryModel.
+ * Example:
+ *  e.g. DiagnosisEntryModel.find({ patientId: id });
+ */
 
-export const GetDiagnosisEntryModel = (type: string) => {
+const DiagnosisEntryCreate = (type: string) => {
   switch (type) {
     case 'HealthCheck':
       return HealthCheckModel;
@@ -93,3 +100,5 @@ export const GetDiagnosisEntryModel = (type: string) => {
       throw new Error('Invalid type');
   }
 };
+
+export { DiagnosisEntryModel, DiagnosisEntryCreate };
