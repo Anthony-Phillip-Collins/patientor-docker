@@ -1,4 +1,4 @@
-import { DiagnosisEntryCreate, DiagnosisEntryModel } from '../mongo/models/DiagnosisEntry';
+import { DiagnosisEntryCreate } from '../mongo/models/DiagnosisEntry';
 import PatientModel from '../mongo/models/Patient';
 import { DiagnosisEntry, NewDiagnosisEntry } from '../types/Diagnosis';
 import { NewPatient, Patient, PatientNonSensitive } from '../types/Patient';
@@ -8,7 +8,6 @@ const getPatients = async (): Promise<Patient[]> => {
 };
 
 const getPatientById = async (id: string): Promise<Patient | undefined | null> => {
-  console.log(await DiagnosisEntryModel.find({}));
   return await PatientModel.findById(id).populate('entries');
 };
 
@@ -31,11 +30,13 @@ export const addDiagnosisEntry = async (newDiagnosisEntry: NewDiagnosisEntry): P
     throw new Error('Patient id doesn’t exist.');
   }
 
-  let entry;
+  let entry: NewDiagnosisEntry;
   try {
     const EntryModel = DiagnosisEntryCreate(newDiagnosisEntry.type);
     entry = await new EntryModel(newDiagnosisEntry).save();
-    await PatientModel.findByIdAndUpdate(newDiagnosisEntry.patientId, { $addToSet: { entries: entry._id.toString() } });
+    await PatientModel.findByIdAndUpdate(newDiagnosisEntry.patientId, {
+      $addToSet: { entries: entry._id && entry._id.toString() },
+    });
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(error.message);

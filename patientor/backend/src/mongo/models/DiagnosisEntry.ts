@@ -1,8 +1,11 @@
-// const entry: DiagnosisEntry[] = await DiagnosisEntryModels.DiagnosisEntryModel.find({ patientId: id });
-// console.log(entry);
-
 import { Schema, model } from 'mongoose';
-import { DiagnosisEntry, HealthCheck, HospitalEntry, OccupationalHealthcareEntry } from '../../types/Diagnosis';
+import {
+  DiagnosisEntry,
+  DiagnosisType,
+  HealthCheck,
+  HospitalEntry,
+  OccupationalHealthcareEntry,
+} from '../../types/Diagnosis';
 import schemaToJSON from '../../util/schemaToJSON';
 
 const collection = 'diagnosisEntries';
@@ -16,7 +19,7 @@ const base = {
   patientId: { type: String, required: true },
 };
 
-/* DiagnosisEntry */
+/* DiagnosisEntry - used after saving instance, see comment for DiagnosisEntryCreate */
 
 const diagnosisEntrySchema = new Schema<DiagnosisEntry>({});
 
@@ -31,13 +34,9 @@ const healthCheckSchema = new Schema<HealthCheck>({
   healthCheckRating: { type: Number, required: true },
 });
 
-healthCheckSchema.pre('find', function () {
-  this.getQuery().type = 'HealthCheck';
-});
-
 schemaToJSON(healthCheckSchema);
 
-const HealthCheckModel = model<HealthCheck>('HealthCheck', healthCheckSchema, collection);
+const HealthCheckModel = model<HealthCheck>(DiagnosisType.HealthCheck, healthCheckSchema, collection);
 
 /* Hospital */
 
@@ -46,13 +45,9 @@ const hospitalSchema = new Schema<HospitalEntry>({
   discharge: { date: { type: String, required: true }, criteria: { type: String, required: true } },
 });
 
-hospitalSchema.pre('find', function () {
-  this.getQuery().type = 'Hospital';
-});
-
 schemaToJSON(hospitalSchema);
 
-const HospitalModel = model<HospitalEntry>('Hospital', hospitalSchema, collection);
+const HospitalModel = model<HospitalEntry>(DiagnosisType.Hospital, hospitalSchema, collection);
 
 /* OccupationalHealthcare */
 
@@ -65,21 +60,17 @@ const occupationalHealthcareSchema = new Schema<OccupationalHealthcareEntry>({
   },
 });
 
-occupationalHealthcareSchema.pre('find', function () {
-  this.getQuery().type = 'OccupationalHealthcare';
-});
-
 schemaToJSON(occupationalHealthcareSchema);
 
 const OccupationalHealthcareModel = model<OccupationalHealthcareEntry>(
-  'OccupationalHealthcareEntry',
+  DiagnosisType.OccupationalHealthcare,
   occupationalHealthcareSchema,
   collection
 );
 
 /* Workaround for saving an instance of Union type DiagnosisEntry
  * Example:
- *  const EntryModel = DiagnosisEntryCreate('HealthCheck');
+ *  const EntryModel = DiagnosisEntryCreate(DiagnosisType.HealthCheck);
  *  entry = await new EntryModel(obj as NewDiagnosisEntry).save();
  *
  * DiagnosisEntryCreate is only used for the creation of new DiagnosisEntry instances.
@@ -90,11 +81,11 @@ const OccupationalHealthcareModel = model<OccupationalHealthcareEntry>(
 
 const DiagnosisEntryCreate = (type: string) => {
   switch (type) {
-    case 'HealthCheck':
+    case DiagnosisType.HealthCheck:
       return HealthCheckModel;
-    case 'Hospital':
+    case DiagnosisType.Hospital:
       return HospitalModel;
-    case 'OccupationalHealthcare':
+    case DiagnosisType.OccupationalHealthcare:
       return OccupationalHealthcareModel;
     default:
       throw new Error('Invalid type');

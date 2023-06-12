@@ -21,6 +21,7 @@ export interface Diagnosis {
 
 export interface DiagnosisEntryBase {
   id?: string;
+  _id?: string;
   date: string;
   specialist: string;
   description: string;
