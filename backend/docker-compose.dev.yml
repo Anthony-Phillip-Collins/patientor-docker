@@ -15,6 +15,7 @@ services:
 
     volumes:
       - ./:/usr/src/app
+      - '/usr/src/app/node_modules'
     environment:
       - MONGO_URL=mongodb://the_username:the_password@dev.mongo:27017/the_database
       - NODE_ENV=development
@@ -22,7 +23,7 @@ services:
       dev.mongo:
         condition: service_started
   dev.mongo:
-    image: mongo
+    image: mongo:6.0
     container_name: dev.mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
