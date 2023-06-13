@@ -1,0 +1,18 @@
+services:
+  dev.app:
+    image: "patientor.dev.frontend"
+    container_name: "frontend"
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+
+    # commented out ports because we are using nginx reverse proxy
+
+    # ports:
+    #   - "3000:3000"
+
+    volumes:
+      - "./:/usr/src/app"
+    environment:
+      - WDS_SOCKET_HOST=127.0.0.1
+      - WDS_SOCKET_PORT=0

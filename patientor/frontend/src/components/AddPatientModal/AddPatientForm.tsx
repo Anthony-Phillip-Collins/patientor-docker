@@ -1,6 +1,6 @@
-import { useState, SyntheticEvent } from "react";
+import { SyntheticEvent, useState } from "react";
 
-import { TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent, Box } from "@mui/material";
+import { Button, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { Gender } from "../../types/enums/Gender";
 import { PatientFormValues } from "../../types/Patient";
 

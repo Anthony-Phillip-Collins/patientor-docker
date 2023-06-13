@@ -1,0 +1,35 @@
+services:
+  dev.app:
+    container_name: dev.app
+    extends:
+      file: ./frontend/docker-compose.dev.yml
+      service: dev.app
+    depends_on:
+      dev.api:
+        condition: service_started
+  dev.api:
+    container_name: dev.api
+    extends:
+      file: ./backend/docker-compose.dev.yml
+      service: dev.app
+    depends_on:
+      dev.mongo:
+        condition: service_started
+  dev.mongo:
+    container_name: dev.mongo
+    extends:
+      file: ./backend/docker-compose.dev.yml
+      service: dev.mongo
+  dev.nginx:
+    image: nginx:1.25.0-bullseye
+    container_name: dev.reverse-proxy
+    ports:
+      - '8080:80'
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      dev.app:
+        condition: service_started
+  dev.debug-helper:
+    image: busybox
+    container_name: dev.debug-helper

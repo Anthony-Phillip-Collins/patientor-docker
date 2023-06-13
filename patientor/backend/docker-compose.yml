@@ -2,16 +2,19 @@ version: '3.8'
 
 services:
   app:
-    image: patientor.backend
+    image: patientor.prod.backend
     build:
       context: .
       dockerfile: Dockerfile
     container_name: backend
-    ports:
-      - 4000:4000
+
+    # commented out ports because we are using nginx reverse proxy
+    
+    # ports:
+    #   - 4000:4000
+
     environment:
       - MONGO_URL=mongodb://the_username:the_password@mongo:27017/the_database
-      - REDIS_URL=redis://redis:6379
       - NODE_ENV=production
     depends_on:
       mongo:

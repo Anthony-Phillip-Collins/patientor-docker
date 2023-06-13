@@ -1,0 +1,29 @@
+services:
+  app:
+    extends:
+      file: ./frontend/docker-compose.yml
+      service: app
+    depends_on:
+      api:
+        condition: service_started
+  api:
+    extends:
+      file: ./backend/docker-compose.yml
+      service: app
+    depends_on:
+      mongo:
+        condition: service_started
+  mongo:
+    extends:
+      file: ./backend/docker-compose.yml
+      service: mongo
+  nginx:
+    image: nginx:1.25.0-bullseye
+    ports:
+      - '8080:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    container_name: reverse-proxy
+    depends_on:
+      app:
+        condition: service_started

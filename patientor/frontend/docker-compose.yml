@@ -1,0 +1,10 @@
+services:
+  app:
+    image: "patientor.prod.frontend"
+    container_name: "frontend"
+    build: .
+
+    # commented out ports because we are using nginx reverse proxy
+
+    # ports:
+    #   - "1234:80"

@@ -1,5 +1,5 @@
 {
-  "name": "front-new",
+  "name": "patientor.frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -29,9 +29,14 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "npx eslint --ext .tsx,.ts src/"
+    "lint": "npx eslint --ext .tsx,.ts src/",
+    "docker:build": "docker compose build --no-cache",
+    "docker:up": "docker compose up",
+    "docker:down": "docker compose down",
+    "docker:dev:build": "docker compose -f docker-compose.dev.yml build --no-cache",
+    "docker:dev:up": "docker compose -f docker-compose.dev.yml up",
+    "docker:dev:down": "docker compose -f docker-compose.dev.yml down"
   },
-  "proxy": "http://localhost:3001",
   "eslintConfig": {
     "extends": [
       "react-app",
