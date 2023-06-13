@@ -47,6 +47,12 @@ mongoose
     console.log('connected to MongoDB');
     init();
   })
-  .catch((error) => {
-    console.log('error connection to MongoDB:', error.message);
+  .catch((error:unknown) => {
+    const msg = 'error connection to MongoDB'
+    if(error instanceof Error){
+      console.log(msg, error.message);
+    }
+    else {
+      console.log(msg);
+    }
   });

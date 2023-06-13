@@ -58,7 +58,7 @@ Reload Nginx:
 `docker:dev:nginx:reload`
 
 Debug with busybox:  
-`npm run debug:dev`
+`npm run docker:dev:debug`
 
 #### Development Debug examples
 

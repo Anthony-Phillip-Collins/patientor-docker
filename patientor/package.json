@@ -15,7 +15,7 @@
     "docker:dev:mongo": "docker exec -it dev.mongo mongosh admin -u root -p 'example'",
     "docker:dev:nginx:reload": "docker exec -it dev.reverse-proxy nginx -s reload",
     "docker:dev:ps": "docker compose -f docker-compose.dev.yml ps",
-    "debug:dev": "docker compose -f docker-compose.dev.yml run --rm dev.debug-helper wget -O - http://dev.api:4000"
+    "docker:dev:debug": "docker compose -f docker-compose.dev.yml run --rm dev.debug-helper wget -O - http://dev.api:4000"
   },
   "author": "Anthony Collins",
   "license": "ISC"
