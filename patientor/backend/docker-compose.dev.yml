@@ -28,12 +28,6 @@ services:
     volumes:
       - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - ./mongo_data_dev:/data/db
-  dev.redis:
-    image: redis
-    container_name: dev.redis
-    command: ['redis-server', '--appendonly', 'yes'] # Overwrite the CMD
-    volumes:
-      - ./redis_data_dev:/data
   dev.debug-helper:
     image: busybox
     container_name: dev.debug-helper

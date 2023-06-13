@@ -16,7 +16,13 @@
     "docker:dev:mongo:user": "docker exec -it dev.mongo mongosh -u the_username -p 'the_password' the_database",
     "docker:dev:redis": "docker exec -it dev.redis redis-cli",
     "docker:dev:ps": "docker compose -f docker-compose.dev.yml ps -a",
-    "debug:dev": "docker compose run --rm dev.debug-helper wget -O - http://dev.app:4000"
+    "docker:dev:debug": "docker compose -f docker-compose.dev.yml run --rm dev.debug-helper wget -O - http://dev.app:4000",
+    "docker:build": "docker compose up --build",
+    "docker:up": "docker compose up",
+    "docker:down": "docker compose down --remove-orphans",
+    "docker:mongo": "docker exec -it mongo mongosh admin -u root -p 'example'",
+    "docker:mongo:user": "docker exec -it mongo mongosh -u the_username -p 'the_password' the_database",
+    "docker:ps": "docker compose ps -a"
   },
   "author": "Anthony Collins",
   "license": "ISC",

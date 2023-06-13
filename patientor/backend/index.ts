@@ -18,6 +18,24 @@ const init = () => {
     res.send('pong');
   });
 
+  app.use('*', (_req, res) => {
+    res.send(`
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <title>Patientor backend</title>
+    </head>
+    <body>
+      <h1>Patientor backend</h1>
+      <h2>env: ${process.env.NODE_ENV}</h2>
+      <p>See <a href="/api/patients">/api/patients</a> for patient data</p>
+      <p>See <a href="/api/diagnoses">/api/diagnoses</a> for diagnosis data</p>
+    </body>
+    </html>
+    `);
+  });
+
   app.listen(config.PORT, () => {
     console.log(`Server running on port ${config.PORT}`);
   });

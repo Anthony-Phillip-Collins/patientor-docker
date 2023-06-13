@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 
 USER node
 
-COPY --chown=node:node . /usr/src/app
+COPY --chown=node:node . .
 
 RUN npm install
 
