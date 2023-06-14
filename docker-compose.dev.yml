@@ -21,7 +21,9 @@ services:
       file: ./backend/docker-compose.dev.yml
       service: dev.mongo
   dev.nginx:
-    image: nginx:1.25.0-bullseye
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
     container_name: dev.reverse-proxy
     ports:
       - '8080:80'
